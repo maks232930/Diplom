@@ -51,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField('Фамилия', max_length=50, null=True)
     is_blocked = models.BooleanField(default=False, verbose_name='Заблокировать')
     is_active = models.BooleanField(default=True, verbose_name='Доступ в админку')
-    is_master = models.BooleanField(default=False, verbose_name='Мастер')
+    # is_master = models.BooleanField(default=False, verbose_name='Мастер')
     is_client = models.BooleanField(default=True, verbose_name='Клиент')
 
     objects = UserManager()  # example Model.objects
