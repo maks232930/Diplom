@@ -16,12 +16,9 @@ class GeneralInformation(models.Model):
     mini_text = models.CharField('Краткое описание парикмахерской', max_length=255)
 
 
-class Services(models.Model):
-    pass
-
-
 class Specialization(models.Model):
     name = models.CharField('Имя специализации', max_length=25)
+    about = models.CharField('О специализации', max_length=255)
 
 
 class Master(models.Model):
