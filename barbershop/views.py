@@ -1,8 +1,14 @@
 from django.shortcuts import render
+from django.views import View
+
+from .models import GeneralInformation
 
 
-def index(request):
-    return render(request, 'barbershop/index.html')
+class HomeView(View):
+
+    def get(self, request):
+        information = GeneralInformation.objects.first()
+        return render(request, 'barbershop/index.html', {'info': information})
 
 
 def service_price(request):
