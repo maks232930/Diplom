@@ -15,7 +15,7 @@
                     <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
                         Галерея</h1>
                     <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
-                            class="mr-2"><a href="index.html">Главная</a></span> <span>Галерея</span></p>
+                            class="mr-2"><a href="{% url 'barbershop:home' %}">Главная</a></span> <span>Галерея</span></p>
                 </div>
             </div>
         </div>
@@ -32,78 +32,17 @@
         </div>
         <div class="container-wrap">
             <div class="row no-gutters">
-                <div class="col-md-3 ftco-animate fadeInUp ftco-animated">
-                    <a href="{% static 'images/gallery-1.jpg' %}"
-                       class="gallery img image-popup d-flex align-items-center"
-                       style="background-image: url({% static 'images/gallery-1.jpg' %});">
-                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
-                            <span class="icon-search"></span>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 ftco-animate fadeInUp ftco-animated">
-                    <a href="{% static 'images/gallery-2.jpg' %}"
-                       class="gallery img image-popup d-flex align-items-center"
-                       style="background-image: url({% static 'images/gallery-2.jpg' %});">
-                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
-                            <span class="icon-search"></span>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 ftco-animate fadeInUp ftco-animated">
-                    <a href="{% static 'images/gallery-3.jpg' %}"
-                       class="gallery img image-popup d-flex align-items-center"
-                       style="background-image: url({% static 'images/gallery-3.jpg' %});">
-                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
-                            <span class="icon-search"></span>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 ftco-animate fadeInUp ftco-animated">
-                    <a href="{% static 'images/gallery-4.jpg' %}"
-                       class="gallery img image-popup d-flex align-items-center"
-                       style="background-image: url({% static 'images/gallery-4.jpg' %});">
-                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
-                            <span class="icon-search"></span>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 ftco-animate fadeInUp ftco-animated">
-                    <a href="{% static 'images/gallery-5.jpg' %}"
-                       class="gallery img image-popup d-flex align-items-center"
-                       style="background-image: url({% static 'images/gallery-5.jpg' %});">
-                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
-                            <span class="icon-search"></span>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 ftco-animate fadeInUp ftco-animated">
-                    <a href="{% static 'images/gallery-6.jpg' %}"
-                       class="gallery img image-popup d-flex align-items-center"
-                       style="background-image: url({% static 'images/gallery-6.jpg' %});">
-                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
-                            <span class="icon-search"></span>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 ftco-animate fadeInUp ftco-animated">
-                    <a href="{% static 'images/gallery-7.jpg' %}"
-                       class="gallery img image-popup d-flex align-items-center"
-                       style="background-image: url({% static 'images/gallery-7.jpg' %});">
-                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
-                            <span class="icon-search"></span>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 ftco-animate fadeInUp ftco-animated">
-                    <a href="{% static 'images/gallery-8.jpg' %}"
-                       class="gallery img image-popup d-flex align-items-center"
-                       style="background-image: url({% static 'images/gallery-8.jpg' %});">
-                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
-                            <span class="icon-search"></span>
-                        </div>
-                    </a>
-                </div>
+                {% for image in images %}
+                    <div class="col-md-3 ftco-animate fadeInUp ftco-animated">
+                        <a href="{{ image.photo.url }}"
+                           class="gallery img image-popup d-flex align-items-center"
+                           style="background-image: url({{ image.photo.url }});">
+                            <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                                <span class="icon-search"></span>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </section>

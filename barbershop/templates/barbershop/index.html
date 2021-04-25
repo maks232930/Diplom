@@ -12,7 +12,8 @@
 
                 <div class="col-md-6 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
 
-                    <h1 class="mb-5" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">{{ info.heading }}</h1>
+                    <h1 class="mb-5"
+                        data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">{{ info.heading }}</h1>
                     <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><a
                             href="#" class="btn btn-primary px-4 py-3">Записаться на прием</a>
                     </p>
@@ -51,9 +52,10 @@
                 </div>
                 <div class="social pl-md-5 p-4">
                     <ul class="social-icon">
-                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                        {% for social_link in social_links %}
+                            <li class="ftco-animate"><a href="{{ social_link.link }}"><span class="icon-{{ social_link.name }}"></span></a></li>
+                        {% endfor %}
+
                     </ul>
                 </div>
             </div>

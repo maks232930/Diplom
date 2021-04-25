@@ -1,5 +1,7 @@
 {% extends 'barbershop_base.html' %}
 
+{% load barbershop_tags %}
+
 {% load static %}
 
 {% block title %}Услуги & Цены{% endblock %}
@@ -15,89 +17,49 @@
                     <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
                         Услуги & Цены</h1>
                     <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
-                            class="mr-2"><a href="index.html">Главная</a></span> <span>Услуги & Цены</span></p>
+                            class="mr-2"><a href="{% url 'barbershop:service_price' %}">Главная</a></span> <span>Услуги & Цены</span>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
     <div class="container">
         <div class="row mt-5 pt-3">
-            <div class="col-md-6">
-                <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
-                    <div class="d-flex text align-items-center">
-                        <h3><span>Men's Haircut</span></h3>
-                        <span class="price">$20.00</span>
-                    </div>
-                    <div class="d-block">
-                        <p>A small river named Duden flows by their place and supplies</p>
-                    </div>
-                </div>
-                <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
-                    <div class="d-flex text align-items-center">
-                        <h3><span>Children Haircut</span></h3>
-                        <span class="price">$29.00</span>
-                    </div>
-                    <div class="d-block">
-                        <p>A small river named Duden flows by their place and supplies</p>
-                    </div>
-                </div>
-                <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
-                    <div class="d-flex text align-items-center">
-                        <h3><span>Beard Cut</span></h3>
-                        <span class="price">$20.00</span>
-                    </div>
-                    <div class="d-block">
-                        <p>A small river named Duden flows by their place and supplies</p>
-                    </div>
-                </div>
-                <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
-                    <div class="d-flex text align-items-center">
-                        <h3><span>Men's Haircut</span></h3>
-                        <span class="price">$20.00</span>
-                    </div>
-                    <div class="d-block">
-                        <p>A small river named Duden flows by their place and supplies</p>
-                    </div>
-                </div>
-            </div>
+            <div class="col">
+                <h2 style="text-align: center">Мужской зал</h2>
+                {% for service in services %}
+                    {% if service.sex == 'man' %}
+                        <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
+                            <div class="d-flex text align-items-center">
+                                <h3><span>{{ service.name }}</span></h3>
+                                <span class="price">BYN {{ service.price }}</span>
+                            </div>
+                            <div class="d-block">
+                                <p>Время выполнения: {% get_execution_time_in_normal_format time=service.execution_time %}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
 
-            <div class="col-md-6">
-                <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
-                    <div class="d-flex text align-items-center">
-                        <h3><span>Women's Haircut</span></h3>
-                        <span class="price">$49.91</span>
-                    </div>
-                    <div class="d-block">
-                        <p>A small river named Duden flows by their place and supplies</p>
-                    </div>
-                </div>
-                <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
-                    <div class="d-flex text align-items-center">
-                        <h3><span>Men's Haircut</span></h3>
-                        <span class="price">$20.00</span>
-                    </div>
-                    <div class="d-block">
-                        <p>A small river named Duden flows by their place and supplies</p>
-                    </div>
-                </div>
-                <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
-                    <div class="d-flex text align-items-center">
-                        <h3><span>Men's Haircut</span></h3>
-                        <span class="price">$20.00</span>
-                    </div>
-                    <div class="d-block">
-                        <p>A small river named Duden flows by their place and supplies</p>
-                    </div>
-                </div>
-                <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
-                    <div class="d-flex text align-items-center">
-                        <h3><span>Men's Haircut</span></h3>
-                        <span class="price">$20.00</span>
-                    </div>
-                    <div class="d-block">
-                        <p>A small river named Duden flows by their place and supplies</p>
-                    </div>
-                </div>
+
+            </div>
+        </div>
+        <div class="row mt-5 pt-3">
+            <div class="col">
+                <h2 style="text-align: center">Женский зал</h2>
+                {% for service in services %}
+                    {% if service.sex != 'man' %}
+                        <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
+                            <div class="d-flex text align-items-center">
+                                <h3><span>{{ service.name }}</span></h3>
+                                <span class="price">BYN {{ service.price }}</span>
+                            </div>
+                            <div class="d-block">
+                                <p>Время выполнения: {% get_execution_time_in_normal_format time=service.execution_time %}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>

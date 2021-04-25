@@ -79,9 +79,15 @@ class Gallery(models.Model):
 
 
 class Service(models.Model):
-    name = models.CharField('Название улуги', max_length=40)
+    SEX = [
+        ('man', 'Мужская'),
+        ('female', 'Женская')
+    ]
+
+    name = models.CharField('Название улуги', max_length=100)
     price = models.DecimalField(verbose_name='Цена', max_digits=5, decimal_places=2)
-    execution_time = models.TimeField('Время выполнения')
+    sex = models.CharField('Пол', max_length=10, choices=SEX, default='man')
+    execution_time = models.PositiveIntegerField('Время выполнения(в минутах)')
     about = models.CharField('О услуге', max_length=100, blank=True, null=True)
 
 

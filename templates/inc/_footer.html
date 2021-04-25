@@ -8,9 +8,9 @@
                     <h2 class="ftco-heading-2">О нас</h2>
                     <p>{{ info.mini_text }}</p>
                     <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                        {% for social_link in social_links %}
+                            <li class="ftco-animate"><a href="{{ social_link.link }}"><span class="icon-{{ social_link.name }}"></span></a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -66,9 +66,10 @@
                         <ul>
                             <li><span class="icon icon-map-marker"></span><span class="text">{{ info.location }}</span>
                             </li>
-                            <li><a href="#"><span class="icon icon-phone"></span><span
+                            <li style="margin-bottom: 0"><a href="#"><span class="icon icon-phone"></span><span
                                     class="text">{{ info.contact_number }}</span></a></li>
-                            <li><a href="#"><span class="icon icon-envelope"></span><span class="text">{{ info.contact_email }}</span></a>
+                            <li><a href="#"><span class="icon icon-envelope"></span><span
+                                    class="text">{{ info.contact_email }}</span></a>
                             </li>
                         </ul>
                     </div>
