@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'barbershop.apps.BarbershopConfig',
+    'shop.apps.ShopConfig'
 
 ]
 
@@ -130,7 +131,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     'users/static',
-    'barbershop/static'
+    'barbershop/static',
+    'shop/static'
 ]
 
 MEDIA_URL = '/media/'
