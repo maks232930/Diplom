@@ -42,7 +42,8 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'barbershop.apps.BarbershopConfig',
-    'shop.apps.ShopConfig'
+    'shop.apps.ShopConfig',
+    'blog.apps.BlogConfig'
 
 ]
 
