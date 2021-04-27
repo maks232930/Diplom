@@ -18,6 +18,13 @@ class GeneralInformation(models.Model):
     description = models.TextField('Описание парикмахерской', max_length=1000)
     mini_text = models.CharField('Краткое описание парикмахерской', max_length=255)
 
+    def __str__(self):
+        return 'Общая информация'
+
+    class Meta:
+        verbose_name = 'Общая информация'
+        verbose_name_plural = 'Общая информация'
+
 
 class Master(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -28,6 +35,10 @@ class Master(models.Model):
 
     def __str__(self):
         return f'Мастер {self.user.get_full_name()}'
+
+    class Meta:
+        verbose_name = 'Мастер'
+        verbose_name_plural = 'Мастера'
 
 
 class WorkingHours(models.Model):
@@ -48,6 +59,10 @@ class WorkingHours(models.Model):
     end_working = models.TimeField('Конец работы', null=True)
     start_break = models.TimeField('Начало перерыва', null=True)
     end_break = models.TimeField('Конец перерыва', null=True)
+
+    class Meta:
+        verbose_name = 'Время работы'
+        verbose_name_plural = 'Время работы'
 
 
 class SocialLink(models.Model):
@@ -77,6 +92,13 @@ class SocialLink(models.Model):
 class Gallery(models.Model):
     photo = models.ImageField('Фото для галереи', upload_to='gallery/')
 
+    def __str__(self):
+        return 'Фото'
+
+    class Meta:
+        verbose_name = 'Фото для галереи'
+        verbose_name_plural = 'Фото для галереи'
+
 
 class Service(models.Model):
     SEX = [
@@ -90,12 +112,26 @@ class Service(models.Model):
     execution_time = models.PositiveIntegerField('Время выполнения(в минутах)')
     about = models.CharField('О услуге', max_length=100, blank=True, null=True)
 
+    def __str__(self):
+        return f'{self.sex} {self.name}'
+
+    class Meta:
+        verbose_name = 'Услуга'
+        verbose_name_plural = 'Услуги'
+
 
 class Message(models.Model):
     first_name = models.CharField('Ваше имя', max_length=30)
     email = models.EmailField(verbose_name='Ваш email', max_length=100)
     subject = models.CharField('Тема', max_length=20)
     message = models.TextField('Сообщение', max_length=5000)
+
+    def __str__(self):
+        return f'Сообщение от {self.first_name}'
+
+    class Meta:
+        verbose_name = 'Сообщение'
+        verbose_name_plural = 'Сообщение'
 
 
 class Statistics(models.Model):
@@ -123,3 +159,10 @@ class Recording(models.Model):
         null=True)
     phone = models.CharField('Телефон для связи', max_length=20, blank=True, null=True)
     price = models.DecimalField(verbose_name='Цена', max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return f'Заказ на {self.date_and_time_of_recording}'
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'

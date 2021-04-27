@@ -55,6 +55,7 @@ class ContactView(Base, View):
             'info': self.general_information,
             'form': form
         }
+
         return render(request, 'barbershop/contact.html', context)
 
 
