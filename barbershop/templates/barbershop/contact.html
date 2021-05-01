@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-md-1"></div>
                 <div class="col-md-6 ftco-animate fadeInUp ftco-animated">
-                    <form action="" method="post" class="contact-form">
+                    <form id="contactForm" action="" method="post" class="contact-form">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-6">
@@ -80,4 +80,31 @@
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            // catch the form's submit event
+            $('#contactForm').submit(function () {
+                // create an AJAX call
+                $.ajax({
+                    data: $(this).serialize(), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    url: "{% url 'barbershop:contact' %}",
+                    // on success
+                    success: function (response) {
+                        window.location.replace("/");
+                        alert(response.message);
+                    },
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        alert(response.responseJSON.errors);
+                    }
+                });
+                return false;
+            });
+        })
+    </script>
 {% endblock %}

@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import MessageForm
 from .models import GeneralInformation, SocialLink, Gallery, Service
@@ -35,28 +37,47 @@ class GalleryView(Base, View):
         return render(request, 'barbershop/gallery.html', context)
 
 
-class ContactView(Base, View):
+# class ContactView(Base, View):
+#
+#     def get(self, request):
+#         context = {
+#             'info': self.general_information,
+#             'form': MessageForm()
+#         }
+#
+#         return render(request, 'barbershop/contact.html', context)
+#
+#     def post(self, request):
+#         form = MessageForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('barbershop:home')
+#
+#         context = {
+#             'info': self.general_information,
+#             'form': form
+#         }
+#
+#         return render(request, 'barbershop/contact.html', context)
 
-    def get(self, request):
-        context = {
-            'info': self.general_information,
-            'form': MessageForm()
-        }
+@csrf_exempt
+def contact_form_view(request):
+    form = MessageForm()
 
-        return render(request, 'barbershop/contact.html', context)
+    context = {
+        'form': form,
+        'info': GeneralInformation.objects.first()
+    }
 
-    def post(self, request):
+    if request.POST and request.is_ajax():
         form = MessageForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('barbershop:home')
+            return JsonResponse({'message': 'Ваше сообщение отправлено.'}, status=200)
+        else:
+            return JsonResponse({'errors': 'Проверьте поля!'}, status=400)
 
-        context = {
-            'info': self.general_information,
-            'form': form
-        }
-
-        return render(request, 'barbershop/contact.html', context)
+    return render(request, 'barbershop/contact.html', context)
 
 
 class ServicePriceView(Base, View):
