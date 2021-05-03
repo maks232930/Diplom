@@ -31,7 +31,7 @@ class Master(models.Model):
     specialisation = models.CharField('Специализация', max_length=50)
     service = models.ManyToManyField('Service', verbose_name='услуги')
     photo = models.ImageField('Фото мастера', upload_to='master/')
-    about = models.CharField('Немного о себе', max_length=255)
+    about = models.TextField('Немного о себе', max_length=300)
 
     def __str__(self):
         return f'Мастер {self.user.get_full_name()}'
