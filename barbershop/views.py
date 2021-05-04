@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
@@ -101,17 +101,22 @@ class RecordingStepOneView(Base, View):
 
         return render(request, 'barbershop/step-1.html', context)
 
-    def post(self, request):
-        sex = request.POST.get('sex')
 
-        return redirect('barbershop:recording_step_two')
-
-
-class RecordingTwoView(Base, View):
-
+class RecordingStepTwoView(Base, View):
     def get(self, request):
         context = {
-            'info': self.general_information
+            'info': self.general_information,
+            'services': Service.objects.filter(sex=request.GET.get('sex'))
         }
 
         return render(request, 'barbershop/step-2.html', context)
+
+
+class RecordingStepThreeView(Base, View):
+    def get(self, request):
+        context = {
+            'info': self.general_information,
+            'services': Service.objects.filter(sex=request.GET.get('sex'))
+        }
+
+        return render(request, 'barbershop/step-3.html', context)
