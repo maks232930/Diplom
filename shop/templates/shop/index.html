@@ -33,110 +33,24 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 ftco-animate" style="margin-bottom: 10px">
-                    <div class="product-entry text-center">
-                        <a href="#"><img src="{% static 'images/prod-1.png' %}" class="img-fluid" alt=""></a>
-                        <div class="text">
-                            <p class="rate"><span class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star_half"></span></p>
-                            <h3><a href="#">Товар </a></h3>
-                            <span class="price mb-4">Цена</span>
-{#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
+                {% for product in products %}
+                    <div class="col-md-3 ftco-animate" style="margin-bottom: 10px">
+                        <div class="product-entry text-center">
+                            <a href="#"><img src="{{ product.photo.url }}" class="img-fluid" alt=""></a>
+                            <div class="text">
+{#                                <p class="rate"><span class="icon-star2"></span><span class="icon-star2"></span><span#}
+{#                                        class="icon-star2"></span><span class="icon-star2"></span><span#}
+{#                                        class="icon-star_half"></span></p>#}
+                                <h3>{{ product.name }}</h3>
+                                <p class="price mb-4" style="margin-bottom: 8px">Количество: {{ product.quantity }}</p>
+                                <p class="price mb-4">{{ product.price }} BYN</p>
+                                {#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3 ftco-animate">
-                    <div class="product-entry text-center">
-                        <a href="#"><img src="{% static '' %}images/prod-2.png" class="img-fluid" alt=""></a>
-                        <div class="text">
-                            <p class="rate"><span class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star_half"></span></p>
-                            <h3><a href="#">Товар </a></h3>
-                            <span class="price mb-4">Цена</span>
-{#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 ftco-animate">
-                    <div class="product-entry text-center">
-                        <a href="#"><img src="{% static 'images/prod-3.png' %}" class="img-fluid" alt=""></a>
-                        <div class="text">
-                            <p class="rate"><span class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star_half"></span></p>
-                            <h3><a href="#">Товар </a></h3>
-                            <span class="price mb-4">Цена</span>
-{#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 ftco-animate">
-                    <div class="product-entry text-center">
-                        <a href="#"><img src="{% static 'images/prod-4.png' %}" class="img-fluid" alt=""></a>
-                        <div class="text">
-                            <p class="rate"><span class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star_half"></span></p>
-                            <h3><a href="#">Товар </a></h3>
-                            <span class="price mb-4">Цена</span>
-{#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 ftco-animate">
-                    <div class="product-entry text-center">
-                        <a href="#"><img src="{% static 'images/prod-1.png' %}" class="img-fluid" alt=""></a>
-                        <div class="text">
-                            <p class="rate"><span class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star_half"></span></p>
-                            <h3><a href="#">Товар </a></h3>
-                            <span class="price mb-4">Цена</span>
-{#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 ftco-animate">
-                    <div class="product-entry text-center">
-                        <a href="#"><img src="{% static 'images/prod-2.png' %}" class="img-fluid" alt=""></a>
-                        <div class="text">
-                            <p class="rate"><span class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star_half"></span></p>
-                            <h3><a href="#">Товар </a></h3>
-                            <span class="price mb-4">Цена</span>
-{#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 ftco-animate">
-                    <div class="product-entry text-center">
-                        <a href="#"><img src="{% static 'images/prod-3.png' %}" class="img-fluid" alt=""></a>
-                        <div class="text">
-                            <p class="rate"><span class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star_half"></span></p>
-                            <h3><a href="#">Товар </a></h3>
-                            <span class="price mb-4">Цена</span>
-{#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 ftco-animate">
-                    <div class="product-entry text-center">
-                        <a href="#"><img src="{% static 'images/prod-4.png' %}" class="img-fluid" alt=""></a>
-                        <div class="text">
-                            <p class="rate"><span class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star2"></span><span class="icon-star2"></span><span
-                                    class="icon-star_half"></span></p>
-                            <h3><a href="#">Товар </a></h3>
-                            <span class="price mb-4">Цена</span>
-{#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
+
+
             </div>
         </div>
     </section>
