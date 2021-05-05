@@ -9,7 +9,8 @@
                     <p>{{ info.mini_text }}</p>
                     <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                         {% for social_link in social_links %}
-                            <li class="ftco-animate"><a href="{{ social_link.link }}"><span class="icon-{{ social_link.name }}"></span></a></li>
+                            <li class="ftco-animate"><a href="{{ social_link.link }}"><span
+                                    class="icon-{{ social_link.name }}"></span></a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -17,34 +18,24 @@
             <div class="col-md-4">
                 <div class="ftco-footer-widget mb-4">
                     <h2 class="ftco-heading-2">Последние статьи</h2>
-                    <div class="block-21 mb-4 d-flex">
-                        <a class="blog-img mr-4"
-                           style="background-image: url({% static 'images/image_1.jpg' %});"></a>
-                        <div class="text">
-                            <h3 class="heading"><a href="#">Благородные стремления не спасут: был сорван доклад
-                                председателя совхоза</a>
-                            </h3>
-                            <div class="meta">
-                                <div><a href="#"><span class="icon-calendar"></span> Sept 15, 2018</a></div>
-                                <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                                <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                    {% for recent_post in recent_posts %}
+                        <div class="block-21 mb-4 d-flex">
+                            <a class="blog-img mr-4"
+                               style="background-image: url({{ recent_post.photo }});"></a>
+                            <div class="text">
+                                <h3 class="heading"><a href="{{ recent_post.get_absolute_url }}">{{ recent_post.title }}а</a>
+                                </h3>
+                                <div class="meta">
+                                    <div><a href="{{ recent_post.get_absolute_url }}"><span
+                                            class="icon-calendar"></span> {{ recent_post.published_date }}</a></div>
+                                    <div><a href="{{ recent_post.get_absolute_url }}"><span
+                                            class="icon-person"></span> {{ recent_post.author.username }}</a></div>
+                                    <div><a href="{{ recent_post.get_absolute_url }}"><span
+                                            class="icon-chat"></span> {{ recent_post.commet_set.count }}</a></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="block-21 mb-4 d-flex">
-                        <a class="blog-img mr-4"
-                           style="background-image: url({% static 'images/image_2.jpg' %});"></a>
-                        <div class="text">
-                            <h3 class="heading"><a href="#">Новая модель организационной деятельности расставила
-                                все точки над</a>
-                            </h3>
-                            <div class="meta">
-                                <div><a href="#"><span class="icon-calendar"></span> Sept 15, 2018</a></div>
-                                <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                                <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
             <div class="col-md-2">

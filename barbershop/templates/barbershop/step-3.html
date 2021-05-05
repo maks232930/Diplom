@@ -173,7 +173,11 @@
                     <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
                         Онлайн запись</h1>
                     <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
-                            class="mr-2"><a href="{% url 'barbershop:service_price' %}">Главная</a></span> <span>Онлайн запись</span>
+                    ><a href="{% url 'barbershop:home' %}">Главная</a></span> <span style="margin-right: 5px"><a
+                            href="{% url 'barbershop:recording_step_one' %}">Онлайн запись</a></span><span
+                            style="margin-right: 5px"><a
+                            href="{% url 'barbershop:recording_step_one' %}">Шаг 1</a></span><span style="margin-right: 5px"><a
+                            href="{% url 'barbershop:recording_step_two' %}">Шаг 2</a></span><span>Шаг 3</span>
                     </p>
                 </div>
             </div>

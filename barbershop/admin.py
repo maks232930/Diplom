@@ -32,8 +32,15 @@ class MasterAdmin(admin.ModelAdmin):
     inlines = [WorkingHoursAdmin]
 
 
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'sex', 'execution_time')
+    list_display_links = ('name', 'price', 'sex', 'execution_time')
+
+    list_filter = ('sex', )
+
+
 admin.site.register(SocialLink)
-admin.site.register(Service)
+admin.site.register(Service, ServiceAdmin)
 admin.site.register(Recording)
 admin.site.register(WorkingHours)
 admin.site.register(Master, MasterAdmin)

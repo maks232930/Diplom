@@ -3,12 +3,14 @@ from django.shortcuts import render
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
+from blog.models import Post
 from .forms import MessageForm
 from .models import GeneralInformation, SocialLink, Gallery, Service
 
 
 class Base:
     general_information = GeneralInformation.objects.first()
+    recent_posts = Post.objects.all()[:2]
 
 
 class HomeView(Base, View):
@@ -18,6 +20,7 @@ class HomeView(Base, View):
 
         context = {
             'info': self.general_information,
+            'recent_posts': self.recent_posts,
             'social_links': social_links
         }
 
@@ -31,6 +34,7 @@ class GalleryView(Base, View):
 
         context = {
             'info': self.general_information,
+            'recent_posts': self.recent_posts,
             'images': images
         }
 
@@ -66,6 +70,7 @@ def contact_form_view(request):
 
     context = {
         'form': form,
+        'recent_posts': Post.objects.all()[:2],
         'info': GeneralInformation.objects.first()
     }
 
@@ -87,6 +92,7 @@ class ServicePriceView(Base, View):
 
         context = {
             'info': self.general_information,
+            'recent_posts': self.recent_posts,
             'services': services
         }
 
@@ -96,6 +102,7 @@ class ServicePriceView(Base, View):
 class RecordingStepOneView(Base, View):
     def get(self, request):
         context = {
+            'recent_posts': self.recent_posts,
             'info': self.general_information
         }
 
@@ -106,6 +113,7 @@ class RecordingStepTwoView(Base, View):
     def get(self, request):
         context = {
             'info': self.general_information,
+            'recent_posts': self.recent_posts,
             'services': Service.objects.filter(sex=request.GET.get('sex'))
         }
 
@@ -116,6 +124,7 @@ class RecordingStepThreeView(Base, View):
     def get(self, request):
         context = {
             'info': self.general_information,
+            'recent_posts': self.recent_posts,
             'services': Service.objects.filter(sex=request.GET.get('sex'))
         }
 
