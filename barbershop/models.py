@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from users.models import User
 
@@ -29,12 +30,15 @@ class GeneralInformation(models.Model):
 class Master(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     specialisation = models.CharField('Специализация', max_length=50)
-    service = models.ManyToManyField('Service', verbose_name='услуги')
+    services = models.ManyToManyField('Service', verbose_name='Выберите предостовляемые услуги')
     photo = models.ImageField('Фото мастера', upload_to='master/')
     about = models.TextField('Немного о себе', max_length=300)
 
     def __str__(self):
         return f'Мастер {self.user.get_full_name()}'
+
+    def get_services(self):
+        return self.services.all()
 
     class Meta:
         verbose_name = 'Мастер'
@@ -89,6 +93,17 @@ class SocialLink(models.Model):
         verbose_name_plural = "Соцсети"
 
 
+class Specialization(models.Model):
+    name = models.CharField('Название категории услуг', max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Категория услуг'
+        verbose_name_plural = 'Категории услуг'
+
+
 class Gallery(models.Model):
     photo = models.ImageField('Фото для галереи', upload_to='gallery/')
 
@@ -101,19 +116,14 @@ class Gallery(models.Model):
 
 
 class Service(models.Model):
-    SEX = [
-        ('man', 'Мужская'),
-        ('female', 'Женская')
-    ]
-
+    specialisation = models.ForeignKey(Specialization, verbose_name='Категория услуг', on_delete=models.CASCADE)
     name = models.CharField('Название улуги', max_length=100)
     price = models.DecimalField(verbose_name='Цена', max_digits=5, decimal_places=2)
-    sex = models.CharField('Пол', max_length=10, choices=SEX, default='man')
     execution_time = models.PositiveIntegerField('Время выполнения(в минутах)')
     about = models.CharField('О услуге', max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.sex} {self.name}'
+        return f'Категория: {self.specialisation.name}. Название: {self.name}'
 
     class Meta:
         verbose_name = 'Услуга'
@@ -166,3 +176,14 @@ class Recording(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
+
+
+class FreeTime(models.Model):
+    """Свободное время"""
+    master = models.ForeignKey(Master, on_delete=models.CASCADE, verbose_name='Мастер')
+    date_time = models.DateTimeField('Дата и время', default=timezone.now)
+    is_free = models.BooleanField('Свободное?', default=True)
+
+    class Meta:
+        verbose_name = 'Свободное время'
+        verbose_name_plural = 'Свободное время'

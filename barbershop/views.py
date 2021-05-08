@@ -1,11 +1,13 @@
+from django.db.models import Sum
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 from blog.models import Post
 from .forms import MessageForm
-from .models import GeneralInformation, SocialLink, Gallery, Service
+from .models import GeneralInformation, SocialLink, Gallery, Service, FreeTime, Master, Specialization
+from .utils import get_execution_time_in_normal_format
 
 
 class Base:
@@ -103,7 +105,8 @@ class RecordingStepOneView(Base, View):
     def get(self, request):
         context = {
             'recent_posts': self.recent_posts,
-            'info': self.general_information
+            'info': self.general_information,
+            'categories': Specialization.objects.all()
         }
 
         return render(request, 'barbershop/step-1.html', context)
@@ -114,7 +117,7 @@ class RecordingStepTwoView(Base, View):
         context = {
             'info': self.general_information,
             'recent_posts': self.recent_posts,
-            'services': Service.objects.filter(sex=request.GET.get('sex'))
+            'services': Service.objects.filter(specialisation__id=request.GET.get('category'))
         }
 
         return render(request, 'barbershop/step-2.html', context)
@@ -122,10 +125,40 @@ class RecordingStepTwoView(Base, View):
 
 class RecordingStepThreeView(Base, View):
     def get(self, request):
+        services_id = request.GET.getlist('service_id')
+        services = Service.objects.filter(id__in=services_id)
+        if services is None:
+            return redirect('barbershop:recording_step_two')
+        len_services = len(services)
+
+        masters = Master.objects.all()
+        suitable_masters = []
+
+        for master in masters:
+
+            counter = 0
+            for service in services:
+                counter += 1
+                if service in master.get_services():
+                    if counter == len_services:
+                        suitable_masters.append(master)
+                    continue
+                break
+
+        execution_time_and_price = Service.objects.filter(id__in=services_id).values('execution_time', 'price')
+        spent_minutes = execution_time_and_price.values('execution_time').aggregate(Sum('execution_time'))
+        execution_time = get_execution_time_in_normal_format(spent_minutes.get('execution_time__sum'))
+        price_services = execution_time_and_price.values('price').aggregate(Sum('price')).get('price__sum')
+
+        times = FreeTime.objects.filter(is_free=True, master__in=suitable_masters)
+
         context = {
             'info': self.general_information,
             'recent_posts': self.recent_posts,
-            'services': Service.objects.filter(sex=request.GET.get('sex'))
+            'execution_time': execution_time,
+            'times': times,
+            'price_services': price_services,
+            'services': Service.objects.filter(id__in=services_id).values('name')
         }
 
         return render(request, 'barbershop/step-3.html', context)

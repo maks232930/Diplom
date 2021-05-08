@@ -43,9 +43,8 @@ class Post(models.Model):
     """Модель постов"""
     author = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         verbose_name='Автор',
-        default='Аноним'
     )
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     mini_text = models.TextField('Мини текст для превью', max_length=350)
