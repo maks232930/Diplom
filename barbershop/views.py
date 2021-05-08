@@ -43,29 +43,6 @@ class GalleryView(Base, View):
         return render(request, 'barbershop/gallery.html', context)
 
 
-# class ContactView(Base, View):
-#
-#     def get(self, request):
-#         context = {
-#             'info': self.general_information,
-#             'form': MessageForm()
-#         }
-#
-#         return render(request, 'barbershop/contact.html', context)
-#
-#     def post(self, request):
-#         form = MessageForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('barbershop:home')
-#
-#         context = {
-#             'info': self.general_information,
-#             'form': form
-#         }
-#
-#         return render(request, 'barbershop/contact.html', context)
-
 @csrf_exempt
 def contact_form_view(request):
     form = MessageForm()
@@ -135,7 +112,6 @@ class RecordingStepThreeView(Base, View):
         suitable_masters = []
 
         for master in masters:
-
             counter = 0
             for service in services:
                 counter += 1
