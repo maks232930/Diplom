@@ -157,9 +157,8 @@ class Statistics(models.Model):
 
 
 class Recording(models.Model):
-    master = models.ForeignKey(Master, on_delete=models.SET_DEFAULT, default='Уже не работает')
     services = models.ManyToManyField(Service, verbose_name='Услуги')
-    date_and_time_of_recording = models.DateTimeField('Дата и врямя записи')
+    date_and_time_of_recording = models.ManyToManyField('FreeTime', verbose_name='Время записи')
     user = models.ForeignKey(
         User,
         on_delete=models.SET_DEFAULT,
@@ -180,10 +179,38 @@ class Recording(models.Model):
 
 class FreeTime(models.Model):
     """Свободное время"""
+    STATUSES = [
+        ('start_day', 'Начало дня'),
+        ('end_day', 'Конец дня'),
+        ('works_free', 'Работает, свободен'),
+        ('works_busy', 'Работает, занят'),
+        ('does_not_work', 'Не работает'),
+    ]
+
     master = models.ForeignKey(Master, on_delete=models.CASCADE, verbose_name='Мастер')
     date_time = models.DateTimeField('Дата и время', default=timezone.now)
-    is_free = models.BooleanField('Свободное?', default=True)
+    status = models.CharField('Статус', choices=STATUSES, max_length=15, default='works_free')
+
+    def __str__(self):
+        return f'Мастер: {self.master.user.get_full_name()}. Время: {self.date_time}'
 
     class Meta:
         verbose_name = 'Свободное время'
         verbose_name_plural = 'Свободное время'
+        ordering = ('date_time',)
+
+
+class Review(models.Model):
+    """Модель отзывов"""
+    name = models.CharField('ФИО', max_length=100)
+    email = models.EmailField('Email')
+    message = models.TextField('Сообщение', max_length=9999999)
+    is_show = models.BooleanField('Показывать?', default=True)
+    date_time = models.DateTimeField('Дата и время', auto_now_add=True)
+
+    def __str__(self):
+        return f'Отзыв от {self.name}'
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'

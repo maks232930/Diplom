@@ -28,8 +28,7 @@
                 <div class="col-md-7 heading-section ftco-animate text-center">
                     <h2 class="mb-4">Наши товары</h2>
                     <p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
-                    <p class="mt-5">Far far away, behind the word mountains, far from the countries Vokalia and
-                        Consonantia, there live the blind texts.</p>
+                    <p class="mt-5">Ниже представлены товары, которые вы можете приобрести в нашей парикмахерской.</p>
                 </div>
             </div>
             <div class="row">
@@ -44,14 +43,13 @@
                                 <h3>{{ product.name }}</h3>
                                 <p class="price mb-4" style="margin-bottom: 8px">Количество: {{ product.quantity }}</p>
                                 <p class="price mb-4">{{ product.price }} BYN</p>
-                                {#                            <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
+                                {#                     <p><a href="#" class="btn btn-primary">Add to cart</a></p>#}
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-
-
             </div>
         </div>
     </section>
+    {% include 'inc/_pagination.html' %}
 {% endblock %}

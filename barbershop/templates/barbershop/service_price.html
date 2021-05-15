@@ -25,11 +25,11 @@
         </div>
     </div>
     <div class="container">
-        <div class="row mt-5 pt-3">
-            <div class="col">
-                <h2 style="text-align: center">Мужской зал</h2>
-                {% for service in services %}
-                    {% if service.sex == 'man' %}
+        {% for specialisation in specialisations %}
+            <div class="row mt-5 pt-3">
+                <div class="col">
+                    <h2 style="text-align: center">{{ specialisation.name }}</h2>
+                    {% for service in specialisation.service_set.all %}
                         <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
                             <div class="d-flex text align-items-center">
                                 <h3><span>{{ service.name }}</span></h3>
@@ -40,30 +40,11 @@
                                     выполнения: {% get_execution_time_in_normal_format time=service.execution_time %}</p>
                             </div>
                         </div>
-                    {% endif %}
-                {% endfor %}
+                    {% endfor %}
 
 
+                </div>
             </div>
-        </div>
-        <div class="row mt-5 pt-3">
-            <div class="col">
-                <h2 style="text-align: center">Женский зал</h2>
-                {% for service in services %}
-                    {% if service.sex != 'man' %}
-                        <div class="pricing-entry ftco-animate fadeInUp ftco-animated">
-                            <div class="d-flex text align-items-center">
-                                <h3><span>{{ service.name }}</span></h3>
-                                <span class="price">BYN {{ service.price }}</span>
-                            </div>
-                            <div class="d-block">
-                                <p>Время
-                                    выполнения: {% get_execution_time_in_normal_format time=service.execution_time %}</p>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock %}

@@ -188,12 +188,10 @@
         <div class="row mt-5 pt-3">
             <div class="col">
                 <h2 style="text-align: center; font-size: 40px">Онлайн запись</h2>
-                <form method="post" action="">
-                    {% csrf_token %}
+                <form method="get" action="{% url 'barbershop:recording_step_four' %}">
                     <h3>Выберите время</h3>
                     <div class="row align-items-center">
                         <div class="col">
-
                             <table class="table table-bordered table-sm m-0">
                                 <thead class="">
                                 <tr>
@@ -209,7 +207,8 @@
                                 {% for time in times %}
                                     <tr>
                                         <td style="vertical-align: middle">
-                                            <div class="input-group" style="justify-content: center; align-items: center">
+                                            <div class="input-group"
+                                                 style="justify-content: center; align-items: center">
                                                 <div class="input-group-prepend">
                                                     <div class="input">
                                                         <input type="radio"
@@ -218,8 +217,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </td>
                                         <td class="pl-2">{{ time.master.user.get_full_name }}</td>
                                         <td class="pl-2">{{ time.date_time }}</td>
@@ -230,37 +227,23 @@
                                         <td class="pl-2">{{ execution_time }}</td>
                                         <td class="pl-2">{{ price_services }}</td>
                                     </tr>
+                                {% empty %}
+                                    <h4 style="text-align: center">Сбодоного времени нет</h4>
                                 {% endfor %}
                                 </tbody>
                             </table>
-
-                            {#                            {% for service in services %}#}
-                            {#                                <div class="form-check border-bottom border-dark mb-2 d-flex align-items-center">#}
-                            {#                                    <input class="form-check-input align-items-center" type="checkbox"#}
-                            {#                                           value="{{ service.id }}"#}
-                            {#                                           id="{{ service.id }}" name="service_id">#}
-                            {#                                    <label class="form-check-label mb-2" for="{{ service.id }}">{{ service.name }} <br>Время#}
-                            {#                                        выполнения: {% get_execution_time_in_normal_format time=service.execution_time %}#}
-                            {#                                    </label>#}
-                            {#                                </div>#}
-
-                            {#                            <div class="form-check border-bottom border-dark mb-3">#}
-                            {#                                <div class="checkbox-inline">#}
-                            {#                                    <input class="mr-2" type="checkbox" value="{{ service.id }}"#}
-                            {#                                           id="{{ service.id }}" name="service_id">#}
-                            {#                                    <label class="checkbox-inline"#}
-                            {#                                           for="{{ service.id }}">{{ service.name }}<br>Время#}
-                            {#                                        выполнения: {% get_execution_time_in_normal_format time=service.execution_time %}#}
-                            {#                                    </label>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
-
-                            {#                        {% endfor %}#}
                         </div>
                     </div>
-                    <div class="form-group mt-4">
-                        <input type="submit" value="Далее" class="btn btn-primary py-3 px-4">
-                    </div>
+                    {% if times %}
+                        <div class="form-group mt-4">
+                            <input type="submit" value="Далее" class="btn btn-primary py-3 px-4">
+                        </div>
+                    {% else %}
+                        <div class="form-group mt-4">
+                            <a href="{% url 'barbershop:home' %}" class="btn btn-primary py-3 px-4">На главную</a>
+                        </div>
+                    {% endif %}
+
                 </form>
             </div>
         </div>

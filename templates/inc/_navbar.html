@@ -11,7 +11,7 @@
                 <li class="nav-item {% if request.path == '/' %}active{% endif %}"><a href="{% url 'barbershop:home' %}" class="nav-link">Главная</a></li>
                 <li class="nav-item {% if request.path == '/service-price/' %}active{% endif %}"><a href="{% url 'barbershop:service_price' %}" class="nav-link">Услуги & Цены</a></li>
                 <li class="nav-item {% if request.path == '/gallery/' %}active{% endif %}"><a href="{% url 'barbershop:gallery' %}" class="nav-link">Галерея</a></li>
-                <li class="nav-item {% if request.path == '/blog/' %}active{% endif %}"><a href="{% url 'blog:home' %}" class="nav-link">Блог</a></li>
+                <li class="nav-item {% if request.path == '/review/' %}active{% endif %}"><a href="{% url 'barbershop:review' %}" class="nav-link">Отзывы</a></li>
                 <li class="nav-item {% if request.path == '/shop/' %}active{% endif %}"><a href="{% url 'shop:home' %}" class="nav-link">Товары</a></li>
                 <li class="nav-item {% if request.path == '/contact/' %}active{% endif %}"><a href="{% url 'barbershop:contact' %}" class="nav-link">Контакты</a></li>
                 <li class="nav-item {% if request.path == '/recording-step-one/' %}active{% endif %}"><a href="{% url 'barbershop:recording_step_one' %}" class="nav-link">Онлайн запись</a></li>
