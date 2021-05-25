@@ -171,14 +171,16 @@
                  data-scrollax-parent="true">
                 <div class="col-md-6 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
                     <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-                        Онлайн запись</h1>
+                        Онлайн-запись</h1>
                     <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
                     ><a href="{% url 'barbershop:home' %}">Главная</a></span> <span style="margin-right: 5px"><a
                             href="{% url 'barbershop:recording_step_one' %}">Онлайн запись</a></span><span
                             style="margin-right: 5px"><a
                             href="{% url 'barbershop:recording_step_one' %}">Шаг 1</a></span><span
                             style="margin-right: 5px"><a
-                            href="{% url 'barbershop:recording_step_two' %}">Шаг 2</a></span><span>Шаг 3</span>
+                            href="{% url 'barbershop:recording_step_two' %}">Шаг 2</a></span><span
+                            style="margin-right: 5px"><a
+                            href="{% url 'barbershop:recording_step_four' %}">Шаг 3</a></span><span>Шаг 4</span>
                     </p>
                 </div>
             </div>
@@ -187,51 +189,38 @@
     <div class="container">
         <div class="row mt-5 pt-3">
             <div class="col">
-                <h2 style="text-align: center; font-size: 40px">Онлайн запись</h2>
-                <form method="post" action="">
+                <h2 style="text-align: center; font-size: 40px">Онлайн-запись</h2>
+                <form method="post" action="" class="contact-form">
                     {% csrf_token %}
-                    <h3>Выберите время</h3>
+                    {#                    <h3>Завершение записи:</h3>#}
                     <div class="row align-items-center">
                         <div class="col">
-
-                            <table class="table table-bordered table-sm m-0">
-                                <thead class="">
-                                <tr>
-                                    <th class="pl-2">#</th>
-                                    <th class="pl-2">Мастер</th>
-                                    <th class="pl-2">Время записи</th>
-                                    <th class="pl-2">Время исполнения</th>
-                                    <th class="pl-2">Цена(BYN)</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for time in times %}
-                                    <tr>
-                                        <td>
-                                            <div class="input-group" style="justify-content: center">
-                                                <div class="input-group-prepend">
-                                                    <div class="input">
-                                                        <input type="radio"
-                                                               name="service_id"
-                                                               value="{{ time.id }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                        </td>
-                                        <td class="pl-2">{{ time.master.user.get_full_name }}</td>
-                                        <td class="pl-2">{{ time.date_time }}</td>
-                                        <td class="pl-2">{{ execution_time }}</td>
-                                        <td class="pl-2">{{ price_services }}</td>
-                                    </tr>
+                            <p>
+                                <span>Услуги:</span>
+                                {% for service in services %}
+                                    {% if services.count == forloop.counter %}
+                                        {{ service.name }}.
+                                    {% else %}
+                                        {{ service.name }},
+                                    {% endif %}
                                 {% endfor %}
-                                </tbody>
-                            </table>
+                            </p>
+                            <p><span>Цена: </span>{{ price }} BYN</p>
+                            <p><span>Мастер: </span>{{ recording_time.master.user.get_full_name }}</p>
+                            <p><span>Время выполниния:</span> {{ execution_time }}</p>
+                            <p><span>Дата и время записи:</span> {{ recording_time.date_time }}</p>
+                            <div class="form-group">
+                                {{ form.phone }}
+                                {{ form.price }}
+                                {{ form.services }}
+                                {{ form.date_and_time_of_recording }}
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group mt-4">
-                        <input type="submit" value="Далее" class="btn btn-primary py-3 px-4">
+                    <div class="form-group mt-4" style="display: flex; justify-content: space-between">
+                        <a href="{{ return_path }}"
+                           class="btn btn-primary py-3 px-4">Назад</a>
+                        <input type="submit" value="Завершить" class="btn btn-primary py-3 px-4">
                     </div>
                 </form>
             </div>

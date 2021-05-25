@@ -1,4 +1,4 @@
-{% load static %}
+{% load barbershop_tags %}
 <footer class="ftco-footer ftco-section img">
     <div class="overlay"></div>
     <div class="container">
@@ -19,27 +19,15 @@
                 <div class="ftco-footer-widget mb-4">
                     <h2 class="ftco-heading-2">Последние отзывы</h2>
                     <ul class="comment-list">
-                        {% for review in recent_posts %}
-                            <li class="comment">
-                                <div style="width: 100%" class="comment-body">
-                                    <h3>{{ review.name }}</h3>
-                                    <div class="meta">{{ review.date_time }}</div>
-                                    <p style="word-wrap: break-word">{{ review.message|truncatechars:28 }}</p>
-                                </div>
-                            </li>
-                        {% endfor %}
+                        {% get_recent_review %}
                     </ul>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="ftco-footer-widget mb-4 ml-md-4">
-                    <h2 class="ftco-heading-2">Сервисы</h2>
+                    <h2 class="ftco-heading-2">Категории услуг</h2>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="py-2 d-block">Haircut</a></li>
-                        <li><a href="#" class="py-2 d-block">Hairstyle</a></li>
-                        <li><a href="#" class="py-2 d-block">Trimming</a></li>
-                        <li><a href="#" class="py-2 d-block">Shaving</a></li>
-                        <li><a href="#" class="py-2 d-block">Skin Care</a></li>
+                        {% get_specialisation %}
                     </ul>
                 </div>
             </div>

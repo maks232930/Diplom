@@ -1,5 +1,7 @@
 from django import template
 
+from barbershop.models import Specialization, Review
+
 register = template.Library()
 
 
@@ -23,3 +25,14 @@ def get_execution_time_in_normal_format(time):
         suffix = ["час", "часа", "часов"][plural_rus_variant(hours)]
         return f'{time // 60} {suffix} {time % 60} минут'
     return f'{time} минут'
+
+
+@register.inclusion_tag('barbershop/list_specializations.html')
+def get_specialisation():
+    return {'specializations': Specialization.objects.values('name')}
+
+
+@register.inclusion_tag('barbershop/list_review.html')
+def get_recent_review():
+    return {'reviews': Review.objects.order_by('date_time')[:2]}
+

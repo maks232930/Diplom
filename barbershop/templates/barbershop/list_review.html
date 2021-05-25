@@ -1,0 +1,9 @@
+{% for review in reviews %}
+    <li class="comment">
+        <div style="width: 100%" class="comment-body">
+            <h3>{{ review.name }}</h3>
+            <div class="meta">{{ review.date_time }}</div>
+            <p style="word-wrap: break-word">{{ review.message|truncatechars:28 }}</p>
+        </div>
+    </li>
+{% endfor %}

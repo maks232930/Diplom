@@ -43,7 +43,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 
 class FreeTimeAdmin(admin.ModelAdmin):
-    list_display = ('master', 'date_time', 'status')
+    list_display = ('id', 'master', 'date_time', 'status')
     list_display_links = ('master', 'date_time')
 
     list_filter = ('status', 'master')

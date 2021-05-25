@@ -8,7 +8,7 @@ from .views import (
     RecordingStepOneView,
     RecordingStepTwoView,
     RecordingStepThreeView,
-    RecordingSteepFourView,
+    recording_steep_four,
     ReviewView
 )
 
@@ -23,5 +23,5 @@ urlpatterns = [
     path('recording-step-one/', RecordingStepOneView.as_view(), name='recording_step_one'),
     path('recording-step-two/', RecordingStepTwoView.as_view(), name='recording_step_two'),
     path('recording-step-three/', RecordingStepThreeView.as_view(), name='recording_step_three'),
-    path('recording-step-four/', RecordingSteepFourView.as_view(), name='recording_step_four'),
+    path('recording-step-four/', recording_steep_four, name='recording_step_four'),
 ]

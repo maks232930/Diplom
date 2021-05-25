@@ -13,4 +13,4 @@ def get_execution_time_in_normal_format(time, return_format='str'):
     else:
         if time > 60:
             return timedelta(hours=time // 60, minutes=time * 60)
-        return timedelta(minutes=time % 60)
+        return timedelta(minutes=60)

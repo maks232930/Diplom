@@ -447,7 +447,7 @@
                  data-scrollax-parent="true">
                 <div class="col-md-6 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
                     <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-                        Онлайн запись</h1>
+                        Онлайн-запись</h1>
                     <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
                     ><a href="{% url 'barbershop:home' %}">Главная</a></span> <span style="margin-right: 5px"><a
                             href="{% url 'barbershop:recording_step_one' %}">Онлайн запись</a></span><span
@@ -461,7 +461,7 @@
     <div class="container">
         <div class="row mt-5 pt-3">
             <div class="col">
-                <h2 style="text-align: center; font-size: 40px">Онлайн запись</h2>
+                <h2 style="text-align: center; font-size: 40px">Онлайн-запись</h2>
                 <form method="get" action="{% url 'barbershop:recording_step_three' %}">
                     <h3>Выберите услуги:</h3>
                     <div class="row align-items-center">
@@ -469,43 +469,17 @@
                             {% for service in services %}
                                 <input class="checkbox-booking" type="checkbox" name="service_id"
                                        id="booking-{{ service.id }}" value="{{ service.id }}">
-                                <label class="for-checkbox-booking" for="booking-{{ service.id }}">
+                                <label class="for-checkbox-booking ml-0" for="booking-{{ service.id }}">
                                     <span class="text">{{ service.name }} <span style="color: white">{% get_execution_time_in_normal_format time=service.execution_time %}</span></span>
                                     <p style="margin-left: 10px">{{ service.price }} BYN</p>
                                 </label>
                             {% endfor %}
 
-                            {#                            <table class="table table-bordered table-sm m-0">#}
-                            {#                                <thead class="">#}
-                            {#                                <tr>#}
-                            {#                                    <th>#</th>#}
-                            {#                                    <th>Название услуги</th>#}
-                            {#                                    <th>Время выполнения</th>#}
-                            {#                                    <th>Цена(BYN)</th>#}
-                            {#                                </tr>#}
-                            {#                                </thead>#}
-                            {#                                <tbody>#}
-                            {#                                {% for service in services %}#}
-                            {#                                    <tr>#}
-                            {#                                        <td>#}
-                            {#                                            <label class="custom-control custom-checkbox">#}
-                            {#                                                <input type="checkbox" class="custom-control-input" name="service_id"#}
-                            {#                                                       value="{{ service.id }}">#}
-                            {#                                                <span class="custom-control-indicator"></span>#}
-                            {#                                            </label>#}
-                            {#                                        </td>#}
-                            {#                                        <td>{{ service.name }}</td>#}
-                            {#                                        <td>{% get_execution_time_in_normal_format time=service.execution_time %}</td>#}
-                            {#                                        <td>{{ service.price }}</td>#}
-                            {#                                    </tr>#}
-                            {#                                {% endfor %}#}
-                            {#                                </tbody>#}
-                            {#                            </table>#}
-
 
                         </div>
                     </div>
-                    <div class="form-group mt-4">
+                    <div class="form-group mt-4" style="display: flex; justify-content: space-between">
+                        <a href="{% url 'barbershop:recording_step_one' %}" class="btn btn-primary py-3 px-4">Назад</a>
                         <input type="submit" value="Далее" class="btn btn-primary py-3 px-4">
                     </div>
                 </form>

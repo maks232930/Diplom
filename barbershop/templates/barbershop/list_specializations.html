@@ -1,0 +1,3 @@
+{% for specialisation in specializations %}
+    <li><a href="{% url 'barbershop:service_price' %}" class="py-2 d-block">{{ specialisation.name }}</a></li>
+{% endfor %}

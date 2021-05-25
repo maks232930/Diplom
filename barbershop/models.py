@@ -159,14 +159,7 @@ class Statistics(models.Model):
 class Recording(models.Model):
     services = models.ManyToManyField(Service, verbose_name='Услуги')
     date_and_time_of_recording = models.ManyToManyField('FreeTime', verbose_name='Время записи')
-    user = models.ForeignKey(
-        User,
-        on_delete=models.SET_DEFAULT,
-        default='007',
-        verbose_name='Клиент',
-        blank=True,
-        null=True)
-    phone = models.CharField('Телефон для связи', max_length=20, blank=True, null=True)
+    phone = models.CharField('Телефон для связи', max_length=20)
     price = models.DecimalField(verbose_name='Цена', max_digits=5, decimal_places=2)
 
     def __str__(self):
@@ -197,7 +190,7 @@ class FreeTime(models.Model):
     class Meta:
         verbose_name = 'Свободное время'
         verbose_name_plural = 'Свободное время'
-        ordering = ('date_time',)
+        ordering = ('-date_time',)
 
 
 class Review(models.Model):
@@ -214,3 +207,10 @@ class Review(models.Model):
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
+
+
+class TemporaryStorage(models.Model):
+    """Временное хранилище заказов"""
+    services = models.ManyToManyField(Service)
+    free_times = models.ManyToManyField(FreeTime)
+    price = models.DecimalField(decimal_places=2, max_digits=5)
