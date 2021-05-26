@@ -66,7 +66,7 @@ class CommentAdmin(admin.ModelAdmin):
     save_on_top = True
 
 
-admin.site.register(Tag, TagAdmin)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Post, PostAdmin)
-admin.site.register(Comment, CommentAdmin)
+# admin.site.register(Tag, TagAdmin)
+# admin.site.register(Category, CategoryAdmin)
+# admin.site.register(Post, PostAdmin)
+# admin.site.register(Comment, CommentAdmin)

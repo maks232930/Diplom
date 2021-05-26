@@ -9,10 +9,10 @@ from .models import (
     GeneralInformation,
     Service,
     Recording,
-    WorkingHours,
     FreeTime,
     Specialization,
-    Review
+    Review,
+    TwilioSettings
 )
 
 
@@ -23,16 +23,6 @@ class GeneralInformationAdmin(admin.ModelAdmin):
     list_display_links = ('name', 'heading', 'contact_number', 'contact_number_description',
                           'contact_email', 'location', 'location_description', 'working_days', 'working_hours',
                           )
-
-
-class WorkingHoursAdmin(admin.StackedInline):
-    model = WorkingHours
-    extra = 1
-    show_change_link = True
-
-
-class MasterAdmin(admin.ModelAdmin):
-    inlines = [WorkingHoursAdmin]
 
 
 class ServiceAdmin(admin.ModelAdmin):
@@ -60,8 +50,7 @@ class ReviewAdmin(admin.ModelAdmin):
 admin.site.register(SocialLink)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(Recording)
-admin.site.register(WorkingHours)
-admin.site.register(Master, MasterAdmin)
+admin.site.register(Master)
 admin.site.register(Gallery)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Message)
@@ -69,3 +58,4 @@ admin.site.register(FreeTime, FreeTimeAdmin)
 admin.site.register(Statistics)
 admin.site.register(Specialization)
 admin.site.register(GeneralInformation, GeneralInformationAdmin)
+admin.site.register(TwilioSettings)

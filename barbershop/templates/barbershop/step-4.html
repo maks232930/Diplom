@@ -195,6 +195,7 @@
                     {#                    <h3>Завершение записи:</h3>#}
                     <div class="row align-items-center">
                         <div class="col">
+                        <p>Информация будет продублирована на ваш телефон.</p>
                             <p>
                                 <span>Услуги:</span>
                                 {% for service in services %}
@@ -223,6 +224,15 @@
                         <input type="submit" value="Завершить" class="btn btn-primary py-3 px-4">
                     </div>
                 </form>
+                <div class="errorlist mt-3">
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p class="mb-2">{{ field.label }}: {{ error|escape }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

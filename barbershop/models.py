@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from phonenumber_field.modelfields import PhoneNumberField
 
 from users.models import User
 
@@ -43,30 +44,6 @@ class Master(models.Model):
     class Meta:
         verbose_name = 'Мастер'
         verbose_name_plural = 'Мастера'
-
-
-class WorkingHours(models.Model):
-    DAYS_OF_WEEKS = [
-        ('пн', 'Понедельник'),
-        ('вт', 'Вторник'),
-        ('ср', 'Среда'),
-        ('чт', 'Четвер'),
-        ('пт', 'Пятница'),
-        ('сб', 'Субота'),
-        ('вс', 'Воскресенье'),
-    ]
-
-    master = models.ForeignKey(Master, on_delete=models.CASCADE, verbose_name='Мастер')
-    day_of_week = models.CharField('День недели', choices=DAYS_OF_WEEKS, max_length=10)
-    is_working = models.BooleanField('Работает?', default=True)
-    start_working = models.TimeField('Начало работы', null=True)
-    end_working = models.TimeField('Конец работы', null=True)
-    start_break = models.TimeField('Начало перерыва', null=True)
-    end_break = models.TimeField('Конец перерыва', null=True)
-
-    class Meta:
-        verbose_name = 'Время работы'
-        verbose_name_plural = 'Время работы'
 
 
 class SocialLink(models.Model):
@@ -145,7 +122,7 @@ class Message(models.Model):
 
 
 class Statistics(models.Model):
-    name = models.CharField('Имя достижения', max_length=15)
+    name = models.CharField('Имя достижения', max_length=50)
     count = models.PositiveIntegerField('Количество')
 
     def __str__(self):
@@ -159,8 +136,9 @@ class Statistics(models.Model):
 class Recording(models.Model):
     services = models.ManyToManyField(Service, verbose_name='Услуги')
     date_and_time_of_recording = models.ManyToManyField('FreeTime', verbose_name='Время записи')
-    phone = models.CharField('Телефон для связи', max_length=20)
+    phone = PhoneNumberField()
     price = models.DecimalField(verbose_name='Цена', max_digits=5, decimal_places=2)
+    date_time = models.DateTimeField('Дата и время', auto_now_add=True)
 
     def __str__(self):
         return f'Заказ на {self.date_and_time_of_recording}'
@@ -209,8 +187,14 @@ class Review(models.Model):
         verbose_name_plural = 'Отзывы'
 
 
-class TemporaryStorage(models.Model):
-    """Временное хранилище заказов"""
-    services = models.ManyToManyField(Service)
-    free_times = models.ManyToManyField(FreeTime)
-    price = models.DecimalField(decimal_places=2, max_digits=5)
+class TwilioSettings(models.Model):
+    account_sid = models.CharField('ACCOUNT SID', max_length=255)
+    auth_token = models.CharField('AUTH TOKEN', max_length=255)
+    phone_number = models.CharField('PHONE NUMBER', max_length=25)
+
+    def __str__(self):
+        return f'Номер {self.phone_number}'
+
+    class Meta:
+        verbose_name = 'Телефон для оповещения'
+        verbose_name_plural = 'Телефоны для оповещения'
