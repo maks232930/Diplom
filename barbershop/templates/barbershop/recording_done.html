@@ -1,0 +1,42 @@
+{% extends 'barbershop_base.html' %}
+
+{% load barbershop_tags %}
+
+{% block title %}Запись завершена{% endblock %}
+
+{% block main %}
+    <div class="hero-wrap" style="background-image: {% get_main_photo %};"
+         data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center"
+                 data-scrollax-parent="true">
+                <div class="col-md-6 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+                    <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                        Онлайн-запись</h1>
+                    <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
+                    ><a href="{% url 'barbershop:home' %}">Главная</a></span> <span style="margin-right: 5px"><a
+                            href="{% url 'barbershop:recording_step_one' %}">Онлайн запись</a></span><span
+                            style="margin-right: 5px"><a
+                            href="{% url 'barbershop:recording_step_one' %}">Шаг 1</a></span><span
+                            style="margin-right: 5px"><a
+                            href="{% url 'barbershop:recording_step_two' %}">Шаг 2</a></span><span
+                            style="margin-right: 5px"><a
+                            href="{% url 'barbershop:recording_step_three' %}">Шаг 3</a></span><span
+                            style="margin-right: 5px"><a
+                            href="{% url 'barbershop:recording_step_four' %}">Шаг 4</a></span><span>Завершение</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row mt-5 pt-3">
+            <div class="col">
+                <h2 style="text-align: center; font-size: 40px">Запись успешна завершена</h2>
+                <a href="{% url 'barbershop:home' %}"
+                   class="btn btn-primary py-3 px-4">На главную</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

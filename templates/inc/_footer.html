@@ -6,12 +6,9 @@
             <div class="col-md-3">
                 <div class="ftco-footer-widget mb-4">
                     <h2 class="ftco-heading-2">О нас</h2>
-                    <p>{{ info.mini_text }}</p>
+                    {% get_mini_text %}
                     <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                        {% for social_link in social_links %}
-                            <li class="ftco-animate"><a href="{{ social_link.link }}"><span
-                                    class="icon-{{ social_link.name }}"></span></a></li>
-                        {% endfor %}
+                        {% get_social_links %}
                     </ul>
                 </div>
             </div>
@@ -19,15 +16,15 @@
                 <div class="ftco-footer-widget mb-4">
                     <h2 class="ftco-heading-2">Последние отзывы</h2>
                     <ul class="comment-list">
-                        {% get_recent_review %}
+                        {% get_recent_reviews %}
                     </ul>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="ftco-footer-widget mb-4 ml-md-4">
-                    <h2 class="ftco-heading-2">Категории услуг</h2>
+                    <h2 class="ftco-heading-2">Категории</h2>
                     <ul class="list-unstyled">
-                        {% get_specialisation %}
+                        {% get_specialisations %}
                     </ul>
                 </div>
             </div>
@@ -36,15 +33,7 @@
                     <h2 class="ftco-heading-2">Есть вопросы?</h2>
                     <div class="block-23 mb-3">
                         <ul>
-                            <li><span style="width: 30px" class="icon icon-map-marker"></span><span
-                                    class="text">{{ info.location }}</span>
-                            </li>
-                            <li style="margin-bottom: 0"><a href="#"><span style="width: 30px"
-                                                                           class="icon icon-phone"></span><span
-                                    class="text">{{ info.contact_number }}</span></a></li>
-                            <li><a href="#"><span class="icon icon-envelope"></span><span
-                                    class="text">{{ info.contact_email }}</span></a>
-                            </li>
+                            {% get_contacts %}
                         </ul>
                     </div>
                 </div>
@@ -57,21 +46,3 @@
         </div>
     </div>
 </footer>
-
-
-{#                        <div class="block-21 mb-4 d-flex">#}
-{#                            <a class="blog-img mr-4"#}
-{#                               style="background-image: url({{ recent_post.photo }});"></a>#}
-{#                            <div class="text">#}
-{#                                <h3 class="heading"><a href="{{ recent_post.get_absolute_url }}">{{ recent_post.title }}а</a>#}
-{#                                </h3>#}
-{#                                <div class="meta">#}
-{#                                    <div><a href="{{ recent_post.get_absolute_url }}"><span#}
-{#                                            class="icon-calendar"></span> {{ recent_post.published_date }}</a></div>#}
-{#                                    <div><a href="{{ recent_post.get_absolute_url }}"><span#}
-{#                                            class="icon-person"></span> {{ recent_post.author.username }}</a></div>#}
-{#                                    <div><a href="{{ recent_post.get_absolute_url }}"><span#}
-{#                                            class="icon-chat"></span> {{ recent_post.commet_set.count }}</a></div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}

@@ -137,11 +137,12 @@ class Recording(models.Model):
     services = models.ManyToManyField(Service, verbose_name='Услуги')
     date_and_time_of_recording = models.ManyToManyField('FreeTime', verbose_name='Время записи')
     phone = PhoneNumberField()
+    name = models.CharField('Имя', max_length=30)
     price = models.DecimalField(verbose_name='Цена', max_digits=5, decimal_places=2)
     date_time = models.DateTimeField('Дата и время', auto_now_add=True)
 
     def __str__(self):
-        return f'Заказ на {self.date_and_time_of_recording}'
+        return f'{self.date_and_time_of_recording.first()}'
 
     class Meta:
         verbose_name = 'Заказ'

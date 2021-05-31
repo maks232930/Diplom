@@ -1,6 +1,7 @@
+{% load barbershop_tags %}
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'barbershop:home' %}">{{ info.name }}</a>
+        {% get_logo_name %}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
                 aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="oi oi-menu"></span> Меню
@@ -15,7 +16,12 @@
                 <li class="nav-item {% if request.path == '/shop/' %}active{% endif %}"><a href="{% url 'shop:home' %}" class="nav-link">Товары</a></li>
                 <li class="nav-item {% if request.path == '/contact/' %}active{% endif %}"><a href="{% url 'barbershop:contact' %}" class="nav-link">Контакты</a></li>
                 <li class="nav-item {% if request.path == '/recording-step-one/' %}active{% endif %}"><a href="{% url 'barbershop:recording_step_one' %}" class="nav-link">Онлайн-запись</a></li>
-{#                <li class="nav-item"><a href="#" class="nav-link">Вход & Регистрация</a></li>#}
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item {% if request.path == '/user/profile/' %}active{% endif %}"><a href="{% url 'users:profile' %}" class="nav-link">Профиль</a></li>
+                    <li class="nav-item {% if request.path == '/logout/' %}active{% endif %}"><a href="{% url 'users:logout' %}" class="nav-link">Выход</a></li>
+                {% else %}
+                    <li class="nav-item {% if request.path == '/user/login/' %}active{% endif %}"><a href="{% url 'users:login' %}" class="nav-link">Вход</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

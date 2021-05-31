@@ -18,20 +18,17 @@ from .models import (
     Specialization,
     Review,
     Recording,
-    Statistics, TwilioSettings
+    Statistics,
+    TwilioSettings
 )
 from .utils import get_execution_time_in_normal_format, send_sms
 
 
-class Base:
-    general_information = GeneralInformation.objects.first()
-
-
-class HomeView(Base, View):
-
-    def get(self, request):
+class HomeView(View):
+    @staticmethod
+    def get(request):
         context = {
-            'info': self.general_information,
+            'info': GeneralInformation.objects.first(),
             'social_links': SocialLink.objects.all(),
             'masters': Master.objects.all(),
             'statistics': Statistics.objects.all()
@@ -40,11 +37,10 @@ class HomeView(Base, View):
         return render(request, 'barbershop/index.html', context)
 
 
-class GalleryView(Base, View):
-
-    def get(self, request):
+class GalleryView(View):
+    @staticmethod
+    def get(request):
         context = {
-            'info': self.general_information,
             'images': Gallery.objects.all()
         }
 
@@ -57,7 +53,6 @@ def contact_form_view(request):
 
     context = {
         'form': form,
-        'info': GeneralInformation.objects.first()
     }
 
     if request.POST and request.is_ajax():
@@ -71,29 +66,29 @@ def contact_form_view(request):
     return render(request, 'barbershop/contact.html', context)
 
 
-class ServicePriceView(Base, View):
-
-    def get(self, request):
+class ServicePriceView(View):
+    @staticmethod
+    def get(request):
         context = {
-            'info': self.general_information,
             'specialisations': Specialization.objects.all()
         }
 
         return render(request, 'barbershop/service_price.html', context)
 
 
-class RecordingStepOneView(Base, View):
-    def get(self, request):
+class RecordingStepOneView(View):
+    @staticmethod
+    def get(request):
         context = {
-            'info': self.general_information,
             'categories': Specialization.objects.all()
         }
 
         return render(request, 'barbershop/step-1.html', context)
 
 
-class RecordingStepTwoView(Base, View):
-    def get(self, request):
+class RecordingStepTwoView(View):
+    @staticmethod
+    def get(request):
         category = request.GET.get('category')
         services = Service.objects.filter(specialisation__id=category)
 
@@ -101,15 +96,15 @@ class RecordingStepTwoView(Base, View):
             return redirect('barbershop:recording_step_one')
 
         context = {
-            'info': self.general_information,
             'services': Service.objects.filter(specialisation__id=category),
         }
 
         return render(request, 'barbershop/step-2.html', context)
 
 
-class RecordingStepThreeView(Base, View):
-    def get(self, request):
+class RecordingStepThreeView(View):
+    @staticmethod
+    def get(request):
         services_id = request.GET.getlist('service_id')
         services = Service.objects.filter(id__in=services_id)
 
@@ -119,10 +114,17 @@ class RecordingStepThreeView(Base, View):
         if not services or len_services != len(services_id):
             return redirect(return_path)
 
-        masters = Master.objects.all()
-        times = FreeTime.objects.filter(date_time__gte=datetime.today()).order_by('date_time')
-
         result_list_times = []
+        recordings_list_times = []
+
+        recordings = Recording.objects.all()
+        for recording in recordings:
+            for time in recording.date_and_time_of_recording.all():
+                recordings_list_times.append(time.id)
+
+        masters = Master.objects.all()
+        times = FreeTime.objects.filter(date_time__gte=datetime.today()).exclude(id__in=recordings_list_times).order_by(
+            'date_time')
 
         execution_time_and_price = Service.objects.filter(id__in=services_id).values('execution_time', 'price')
         spent_minutes = execution_time_and_price.values('execution_time').aggregate(Sum('execution_time'))
@@ -162,7 +164,6 @@ class RecordingStepThreeView(Base, View):
                 break
 
         context = {
-            'info': self.general_information,
             'execution_time': execution_time,
             'times': result_list_times,
             'masters': set([time.master.user.get_full_name() for time in result_list_times]),
@@ -230,9 +231,7 @@ def recording_steep_four(request):
     if request.method == 'POST':
         form = RecordingForm(request.POST)
 
-        del form.errors['date_and_time_of_recording']
-        del form.errors['services']
-        del form.errors['price']
+        del form.errors['date_and_time_of_recording'], form.errors['services'], form.errors['price']
 
         if form.is_valid():
             try:
@@ -254,19 +253,17 @@ def recording_steep_four(request):
                 instance.services.set(services)
 
                 twilio_settings = TwilioSettings.objects.first()
-                print(twilio_settings.auth_token)
                 if twilio_settings:
-                    message = f"Сообщение из парикмахерской {info.name}. У вас запись на {right_time[0].date_time}."
+                    message = f"Сообщение из парикмахерской {info.name}. Ваш номер заказа {instance.id}. У вас запись на {right_time[0].date_time}."
                     send_sms(account_sid=twilio_settings.account_sid, auth_token=twilio_settings.auth_token,
                              phone_number_from=twilio_settings.phone_number, phone_number_to=str(instance.phone),
                              message=message)
 
-                return redirect('barbershop:home')
+                return redirect('barbershop:recording_done')
             except Exception:
                 return redirect(return_path)
 
     context = {
-        'info': info,
         'recent_posts': Review.objects.order_by('date_time')[:2],
         'form': form,
         'services': services,
@@ -279,8 +276,19 @@ def recording_steep_four(request):
     return render(request, 'barbershop/step-4.html', context)
 
 
-class ReviewView(Base, View):
-    def get(self, request):
+class RecordingDoneView(View):
+    @staticmethod
+    def get(request):
+        context = {
+
+        }
+
+        return render(request, 'barbershop/recording_done.html', context)
+
+
+class ReviewView(View):
+    @staticmethod
+    def get(request):
         reviews = Review.objects.filter(is_show=True).order_by('date_time')
         paginator = Paginator(reviews, 10)
         page_number = request.GET.get('page')
@@ -288,14 +296,14 @@ class ReviewView(Base, View):
         form = ReviewForm()
 
         context = {
-            'info': self.general_information,
             'form': form,
             'page_obj': page_obj
         }
 
         return render(request, 'barbershop/review.html', context)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         form = ReviewForm(request.POST)
         if form.is_valid():
             form.save()

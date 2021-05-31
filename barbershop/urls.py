@@ -9,7 +9,8 @@ from .views import (
     RecordingStepTwoView,
     RecordingStepThreeView,
     recording_steep_four,
-    ReviewView
+    ReviewView,
+    RecordingDoneView
 )
 
 app_name = 'barbershop'
@@ -24,4 +25,5 @@ urlpatterns = [
     path('recording-step-two/', RecordingStepTwoView.as_view(), name='recording_step_two'),
     path('recording-step-three/', RecordingStepThreeView.as_view(), name='recording_step_three'),
     path('recording-step-four/', recording_steep_four, name='recording_step_four'),
+    path('recording-done', RecordingDoneView.as_view(), name='recording_done')
 ]

@@ -1,11 +1,13 @@
 {% extends 'barbershop_base.html' %}
 
+{% load barbershop_tags %}
+
 {% load static %}
 
 {% block title %}Магазин{% endblock %}
 
 {% block main %}
-    <div class="hero-wrap" style="background-image: url({{ info.main_photo.url }});"
+    <div class="hero-wrap" style="background-image: {% get_main_photo %};"
          data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">

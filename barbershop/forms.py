@@ -19,11 +19,12 @@ class MessageForm(forms.ModelForm):
 class RecordingForm(forms.ModelForm):
     class Meta:
         model = Recording
-        fields = ('services', 'date_and_time_of_recording', 'phone', 'price')
+        fields = ('services', 'date_and_time_of_recording', 'phone', 'price', 'name')
         widgets = {
             'services': forms.HiddenInput(),
             'date_and_time_of_recording': forms.HiddenInput(),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Телефон для связи', 'style': 'width: 25%; font-size: 15px'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваше имя', 'style': 'width: 25%; font-size: 15px'}),
             'price': forms.HiddenInput()
         }
 

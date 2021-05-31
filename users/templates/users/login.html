@@ -1,0 +1,56 @@
+{% extends 'barbershop_base.html' %}
+
+{% load barbershop_tags %}
+
+{% block title %}Вход{% endblock %}
+
+{% block main %}
+    <div class="hero-wrap" style="background-image: {% get_main_photo %};"
+         data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center"
+                 data-scrollax-parent="true">
+                <div class="col-md-6 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+                    <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                        Вход</h1>
+                    <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
+                            class="mr-2"><a href="{% url 'barbershop:home' %}">Главная</a></span> <span>Вход</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row mt-5 pt-3">
+            <div class="col">
+                <h2 style="text-align: center; font-size: 40px">Авторизация</h2>
+                <form method="post" action="" class="contact-form">
+                    {% csrf_token %}
+                    <div class="col align-items-center">
+                        <div class="col" style="display: flex; flex-direction: column;">
+                            <div class="form-group" style="display: flex;flex-direction: column; align-items: center;">
+                                {{ form.email }}
+                                {{ form.password }}
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: center; flex-direction: column;">
+                                <input type="submit" value="Вход" class="btn btn-primary py-3 px-4">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="errorlist mt-3" style="display: flex; flex-direction: column; align-items: center;">
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p class="mb-2">{{ field.label }}: {{ error|escape }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

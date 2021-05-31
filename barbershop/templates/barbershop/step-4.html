@@ -1,4 +1,5 @@
 {% extends 'barbershop_base.html' %}
+
 {% load barbershop_tags %}
 
 {% block title %}Онлайн-запись{% endblock %}
@@ -163,7 +164,7 @@
 {% endblock %}
 
 {% block main %}
-    <div class="hero-wrap" style="background-image: url({{ info.main_photo.url }});"
+    <div class="hero-wrap" style="background-image: {% get_main_photo %};"
          data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">
@@ -192,7 +193,6 @@
                 <h2 style="text-align: center; font-size: 40px">Онлайн-запись</h2>
                 <form method="post" action="" class="contact-form">
                     {% csrf_token %}
-                    {#                    <h3>Завершение записи:</h3>#}
                     <div class="row align-items-center">
                         <div class="col">
                         <p>Информация будет продублирована на ваш телефон.</p>
@@ -215,6 +215,7 @@
                                 {{ form.price }}
                                 {{ form.services }}
                                 {{ form.date_and_time_of_recording }}
+                                {{ form.name }}
                             </div>
                         </div>
                     </div>

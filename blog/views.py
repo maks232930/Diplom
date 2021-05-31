@@ -1,15 +1,13 @@
 from django.shortcuts import render
 from django.views import View
 
-from barbershop.views import Base
 from blog.models import Post
 
 
-class HomeView(Base, View):
+class HomeView(View):
     def get(self, request):
 
         context = {
-            'info': self.general_information,
             'posts': Post.objects.filter(is_published=True)
         }
 
