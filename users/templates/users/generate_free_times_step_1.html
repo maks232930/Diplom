@@ -1,0 +1,76 @@
+{% extends 'barbershop_base.html' %}
+
+{% load barbershop_tags %}
+
+{% block title %}Генерация свободного времени{% endblock %}
+
+{% block style %}
+    select option {
+    margin: 40px;
+    background: #181818;
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+    }
+{% endblock %}
+
+{% block main %}
+    <div class="hero-wrap" style="background-image: {% get_main_photo %};"
+         data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center"
+                 data-scrollax-parent="true">
+                <div class="col-md-6 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+                    <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                        Генерация свободного времени</h1>
+                    <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
+                            class="mr-2"><a href="{% url 'barbershop:home' %}">Главная</a></span><a
+                            href="{% url 'users:profile' %}" style="margin-right: 5px"><span>Профиль</span></a><span>Шаг 1</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row mt-5 pt-3">
+            <div class="col">
+                <form method="get" action="{% url 'users:generate_free_times_step_two' %}" class="contact-form"
+                      style="display: flex; flex-direction: column">
+                    <div style="display: flex; flex-direction: row; max-width: 100%; justify-content: space-between">
+                        <div style="display: flex; flex-direction: column; justify-content: center">
+                            <p>Выберите мастера</p>
+                            <p>{{ form.master }}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: center">
+                            <p>Выберите начало дня</p>
+                            <p>{{ form.start_day }}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: center">
+                            <p>Выберите конец дня</p>
+                            <p>{{ form.end_day }}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: center">
+                            <p>Выберите интервал в минутах</p>
+                            <p>{{ form.interval }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group mt-4" style="display: flex; justify-content: space-between">
+                        <a href="{{ return_path }}"
+                           class="btn btn-primary py-3 px-4">Назад</a>
+                        <input type="submit" value="Далее" class="btn btn-primary py-3 px-4">
+                    </div>
+                </form>
+                <div class="errorlist mt-3">
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p class="mb-2">{{ field.label }}: {{ error|escape }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -2,9 +2,16 @@
 
 {% load barbershop_tags %}
 
-{% block title %}Онлайн-запись{% endblock %}
+{% block title %}Генерация свободного времени{% endblock %}
 
 {% block style %}
+    select option {
+    margin: 40px;
+    background: #181818;
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+    }
+
     @import
     url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&subset=devanagari,latin-ext');
 
@@ -206,15 +213,15 @@
     box-shadow: 0 1x 4px 0 rgba(0, 0, 0, 0.05);
     }
 
-    .checkbox-times:checked + label,
-    .checkbox-times:not(:checked) + label{
+    .checkbox-budget:checked + label,
+    .checkbox-budget:not(:checked) + label{
     position: relative;
     display: inline-block;
     padding: 0;
     padding-top: 20px;
     padding-bottom: 20px;
     width: 260px;
-    font-size: 30px;
+    font-size: 52px;
     line-height: 52px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -235,19 +242,19 @@
     text-fill-color: transparent;
     color: transparent;
     }
-    .checkbox-times:not(:checked) + label{
+    .checkbox-budget:not(:checked) + label{
     background-color: var(--dark-light);
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
     }
-    .checkbox-times:checked + label{
+    .checkbox-budget:checked + label{
     background-color: transparent;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     }
-    .checkbox-times:not(:checked) + label:hover{
+    .checkbox-budget:not(:checked) + label:hover{
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     }
-    .checkbox-times:checked + label::before,
-    .checkbox-times:not(:checked) + label::before{
+    .checkbox-budget:checked + label::before,
+    .checkbox-budget:not(:checked) + label::before{
     position: absolute;
     content: '';
     top: 0;
@@ -258,13 +265,13 @@
     background-image: linear-gradient(138deg, var(--red), var(--yellow));
     z-index: -1;
     }
-    .checkbox-times:checked + label span,
-    .checkbox-times:not(:checked) + label span{
+    .checkbox-budget:checked + label span,
+    .checkbox-budget:not(:checked) + label span{
     position: relative;
     display: block;
     }
-    .checkbox-times:checked + label span::before,
-    .checkbox-times:not(:checked) + label span::before{
+    .checkbox-budget:checked + label span::before,
+    .checkbox-budget:not(:checked) + label span::before{
     position: absolute;
     content: attr(data-hover);
     top: 0;
@@ -280,14 +287,14 @@
     -moz-transition: max-height 0.3s;
     transition: max-height 0.3s;
     }
-    .checkbox-times:not(:checked) + label span::before{
+    .checkbox-budget:not(:checked) + label span::before{
     max-height: 0;
     }
-    .checkbox-times:checked + label span::before{
+    .checkbox-budget:checked + label span::before{
     max-height: 100%;
     }
 
-    .checkbox:checked ~ .section .container .row .col-xl-10 .checkbox-times:not(:checked) + label{
+    .checkbox:checked ~ .section .container .row .col-xl-10 .checkbox-budget:not(:checked) + label{
     background-color: var(--light);
     -webkit-text-stroke: 1px var(--dark-blue);
     text-stroke: 1px var(--dark-blue);
@@ -435,8 +442,6 @@
     height: auto;
     display: block;
     }
-
-
 {% endblock %}
 
 {% block main %}
@@ -448,127 +453,50 @@
                  data-scrollax-parent="true">
                 <div class="col-md-6 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
                     <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-                        Онлайн-запись</h1>
+                        Генерация свободного времени</h1>
                     <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
-                    ><a href="{% url 'barbershop:home' %}">Главная</a></span> <span style="margin-right: 5px"><a
-                            href="{% url 'barbershop:recording_step_one' %}">Онлайн запись</a></span><span
-                            style="margin-right: 5px"><a
-                            href="{% url 'barbershop:recording_step_one' %}">Шаг 1</a></span><span
-                            style="margin-right: 5px"><a
-                            href="{% url 'barbershop:recording_step_two' %}">Шаг 2</a></span><span>Шаг 3</span>
+                            class="mr-2"><a href="{% url 'barbershop:home' %}">Главная</a></span><a
+                            href="{% url 'users:profile' %}" style="margin-right: 5px"><span>Профиль</span></a><a
+                            href="{% url 'users:generate_free_times_step_one' %}"
+                            style="margin-right: 5px"><span>Шаг 1</span></a><span>Шаг 2</span>
                     </p>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="container">
-        <h2 style="text-align: center; font-size: 40px">Онлайн-запись</h2>
-        {% if times %}
+        <div class="row mt-5 pt-3">
             <div class="col">
-                <div class="row pt-3">
-                    <form method="get" action="{% url 'barbershop:recording_step_four' %}" style="width: 100%;">
-                        <h3>Выберите время:</h3>
-                        {% for master in masters %}
-                            <div>
-                            <h3 style="text-align: center">Мастер {{ master }}</h3>
+                <h2 style="text-align: center">Уберите лишнее время</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row align-items-center">
+                        <div class="col">
                             {% for time in times %}
-                                {% if time.master.user.get_full_name == master %}
-                                    <input class="checkbox-times" type="radio" name="times" id="times-{{ time.id }}"
-                                           required value="{{ time.date_time|date:'Y-m-d H:i' }}">
-                                    <label class="for-checkbox-times ml-0" for="times-{{ time.id }}">
-                                        <span data-hover="{{ time.date_time }}">{{ time.date_time }}</span>
-                                    </label>
-                                {% endif %}
+                                <input class="checkbox-booking" type="checkbox" name="time"
+                                       id="booking-{{ time }}" value="{{ time|date:'Y-m-d H:i' }}" checked>
+                                <label class="for-checkbox-booking ml-0" for="booking-{{ time }}">
+                                    <span class="text">{{ time }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group mt-4" style="display: flex; justify-content: space-between">
+                        <a href="{% url 'barbershop:recording_step_one' %}" class="btn btn-primary py-3 px-4">Назад</a>
+                        <input type="submit" value="Сохранить" class="btn btn-primary py-3 px-4">
+                    </div>
+                </form>
+                <div class="errorlist mt-3">
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p class="mb-2">{{ field.label }}: {{ error|escape }}</p>
                             {% endfor %}
                         {% endfor %}
-                        </div>
-                        <div class="form-group mt-4" style="display:flex; justify-content: space-between">
-                            <input type="text" hidden name="price" value="{{ price_services }}">
-                            <input type="text" hidden name="execution_time" value="{{ execution_time }}">
-                            {% for service in services %}
-                                <input type="text" hidden name="services_id" value="{{ service.id }}">
-                            {% endfor %}
-                            <a href="{% url 'barbershop:recording_step_two' %}?category={{ category.id }}" class="btn btn-primary py-3 px-4">Назад</a>
-                            <input type="submit" value="Далее" class="btn btn-primary py-3 px-4">
-                        </div>
-                    </form>
+                    {% endif %}
                 </div>
             </div>
-        {% else %}
-            <div class="col">
-                <h2>Свободного времени нет(</h2>
-                <a href="{% url 'barbershop:home' %}" class="btn btn-primary py-3 px-4 mb-3">На главную</a>
-            </div>
-        {% endif %}
+        </div>
     </div>
-
-
-
-
-    {#            <div class="col">#}
-    {#                <h2 style="text-align: center; font-size: 40px">Онлайн-запись</h2>#}
-    {#                {% if times %}#}
-    {#                    <form method="get" action="{% url 'barbershop:recording_step_four' %}">#}
-    {#                        <h3>Выберите время:</h3>#}
-    {#                        <div class="row align-items-center">#}
-    {#                            <div class="col">#}
-    {#                                <table class="table table-bordered table-sm m-0">#}
-    {#                                    <thead class="">#}
-    {#                                    <tr>#}
-    {#                                        <th class="pl-2">#</th>#}
-    {#                                        <th class="pl-2">Мастер</th>#}
-    {#                                        <th class="pl-2">Время записи</th>#}
-    {#                                        <th class="pl-2">Услуги</th>#}
-    {#                                        <th class="pl-2">Время исполнения</th>#}
-    {#                                        <th class="pl-2">Цена(BYN)</th>#}
-    {#                                    </tr>#}
-    {#                                    </thead>#}
-    {#                                    <tbody>#}
-    {#                                    {% for time in times %}#}
-    {#                                        <tr>#}
-    {#                                            <td style="vertical-align: middle">#}
-    {#                                                <div class="input-group"#}
-    {#                                                     style="justify-content: center; align-items: center">#}
-    {#                                                    <div class="input-group-prepend">#}
-    {#                                                        <div class="input">#}
-    {#                                                            <input type="radio"#}
-    {#                                                                   name="times"#}
-    {#                                                                   value="{{ time.date_time|date:'Y-m-d H:i' }}"#}
-    {#                                                                   required>#}
-    {#                                                        </div>#}
-    {#                                                    </div>#}
-    {#                                                </div>#}
-    {#                                            </td>#}
-    {#                                            <td class="pl-2">{{ time.master.user.get_full_name }}</td>#}
-    {#                                            <td class="pl-2">{{ time.date_time }}</td>#}
-    {#                                            <td class="pl-2">{% for service in services %}#}
-    {#                                                <p>{{ service.name }}</p>#}
-    {#                                            {% endfor %}#}
-    {#                                            </td>#}
-    {#                                            <td class="pl-2">{{ execution_time }}</td>#}
-    {#                                            <td class="pl-2">{{ price_services }}</td>#}
-    {#                                        </tr>#}
-    {#                                    {% empty %}#}
-    {#                                        <h4 style="text-align: center">Сбодоного времени нет</h4>#}
-    {#                                    {% endfor %}#}
-    {#                                    </tbody>#}
-    {#                                </table>#}
-    {#                            </div>#}
-    {#                        </div>#}
-    {#                            <div class="form-group mt-4">#}
-    {#                                <input type="text" hidden name="price" value="{{ price_services }}">#}
-    {#                                <input type="text" hidden name="execution_time" value="{{ execution_time }}">#}
-    {#                                {% for service in services %}#}
-    {#                                    <input type="text" hidden name="services_id" value="{{ service.id }}">#}
-    {#                                {% endfor %}#}
-    {##}
-    {#                                <input type="submit" value="Далее" class="btn btn-primary py-3 px-4">#}
-    {#                            </div>#}
-    {#                    </form>#}
-    {#                {% else %}#}
-    {#                    <h2>Свободного времени нет(</h2>#}
-    {#                    <a href="{% url 'barbershop:home' %}" class="btn btn-primary py-3 px-4 mb-3">На главную</a>#}
-    {#                {% endif %}#}
-    {##}
-    {#            </div>#}
 {% endblock %}

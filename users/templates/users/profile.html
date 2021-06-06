@@ -23,43 +23,59 @@
     </div>
     <div class="container">
         <div class="row mt-5 pt-3">
-            <div class="col">
+            <div class="col mb-4">
                 {% if request.user.is_superuser %}
-                    <h2 style="text-align: center">Ваши возможности</h2>
-                    <a href="/admin/" class="btn btn-primary py-3 px-4">Административная панель</a>
-                    <a href="#" class="btn btn-primary py-3 px-4">Посмотреть записи</a>
+                    <h2 class="mb-4" style="text-align: center">Меню возможностей</h2>
+                    <a href="/admin/" class="btn btn-primary py-3 px-4 mb-3">Административная панель</a>
+                    <a href="/admin/barbershop/generalinformation/1/change/" class="btn btn-primary py-3 px-4 mb-3">Изменение данных о сайте</a>
+                    <a href="/admin/barbershop/twiliosettings/1/change/" class="btn btn-primary py-3 px-4 mb-3">Изменение настроек для оповещения</a>
+                    <a href="/admin/barbershop/gallery/" class="btn btn-primary py-3 px-4 mb-3">Управление галереей</a>
+                    <a href="/admin/barbershop/recording/" class="btn btn-primary py-3 px-4 mb-3">Посмотреть записи</a>
+                    <a href="/admin/barbershop/message/" class="btn btn-primary py-3 px-4 mb-3">Просмотреть сообщения</a>
+                    <a href="/admin/barbershop/review/" class="btn btn-primary py-3 px-4 mb-3">Управление отзывами</a>
+                    <a href="/admin/barbershop/service/" class="btn btn-primary py-3 px-4 mb-3">Управление услугами</a>
+                    <a href="/admin/barbershop/freetime/" class="btn btn-primary py-3 px-4 mb-3">Просмотр времени для записи</a>
+                    <a href="{% url 'users:generate_free_times_step_one' %}" class="btn btn-primary py-3 px-4 mb-3">Сгенерировать свободное время</a>
+                    <a href="/admin/barbershop/master/" class="btn btn-primary py-3 px-4 mb-3">Управление мастерами</a>
                 {% else %}
-                    <h2 style="text-align: center">Ваши записи</h2>
-                    <table class="table table-dark table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Имя</th>
-                            <th scope="col">Услуги</th>
-                            <th scope="col">Время выполнения</th>
-                            <th scope="col">Время записи</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for recording in recordings %}
+                    {% if recordings %}
+                        <h2 style="text-align: center">Ваши записи на сегодня</h2>
+                        <table class="table table-dark table-striped">
+                            <thead>
                             <tr>
-                                <th scope="row">{{ recording.id }}</th>
-                            <td>{{ recording.name }}</td>
-                                <td>
-                                    {% for service in recording.services.all %}
-                                        {% if recording.services.count == forloop.counter %}
-                                            {{ service.name }}.
-                                        {% else %}
-                                            {{ service.name }},
-                                        {% endif %}
-                                    {% endfor %}
-                                </td>
-                                <td>{% get_execution_time_in_normal_format time=recording.services.all input_format='list' %}</td>
-                                <td>{% get_time_start time=recording.date_and_time_of_recording.first %}</td>
+                                <th scope="col">#</th>
+                                <th scope="col">Имя</th>
+                                <th scope="col">Номер телефона</th>
+                                <th scope="col">Услуги</th>
+                                <th scope="col">Время выполнения</th>
+                                <th scope="col">Время записи</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {% for recording in recordings %}
+                                <tr>
+                                    <th scope="row">{{ recording.id }}</th>
+                                    <td>{{ recording.name }}</td>
+                                    <td>{{ recording.phone }}</td>
+                                    <td>
+                                        {% for service in recording.services.all %}
+                                            {% if recording.services.count == forloop.counter %}
+                                                {{ service.name }}.
+                                            {% else %}
+                                                {{ service.name }},
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{% get_execution_time_in_normal_format time=recording.services.all input_format='list' %}</td>
+                                    <td>{% get_time_start time=recording.date_and_time_of_recording.last %}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <h2 style="text-align: center">У вас нет записей на сегодня</h2>
+                    {% endif %}
+
                 {% endif %}
             </div>
         </div>

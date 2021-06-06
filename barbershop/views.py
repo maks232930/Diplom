@@ -115,16 +115,9 @@ class RecordingStepThreeView(View):
             return redirect(return_path)
 
         result_list_times = []
-        recordings_list_times = []
 
-        recordings = Recording.objects.all()
-        for recording in recordings:
-            for time in recording.date_and_time_of_recording.all():
-                recordings_list_times.append(time.id)
-
-        masters = Master.objects.all()
-        times = FreeTime.objects.filter(date_time__gte=datetime.today()).exclude(id__in=recordings_list_times).order_by(
-            'date_time')
+        masters = Master.objects.all().select_related('user').prefetch_related('services')
+        times = FreeTime.objects.filter(date_time__gte=datetime.today()).select_related('master__user').order_by('date_time')
 
         execution_time_and_price = Service.objects.filter(id__in=services_id).values('execution_time', 'price')
         spent_minutes = execution_time_and_price.values('execution_time').aggregate(Sum('execution_time'))
@@ -138,28 +131,32 @@ class RecordingStepThreeView(View):
             counter = 0
             for service in services:
                 counter += 1
-                if service in master.get_services():
+                master_services = master.get_services()
+                if service in master_services:
                     if counter == len_services:
                         counter_times = 0
-                        for time in times.filter(master=master):
+                        filter_times = times.filter(master=master)
+                        for time in filter_times:
                             counter_times += 1
-                            if time.status == 'works_free' or 'start_day':
+                            if time.status in ['works_free', 'start_day']:
                                 last_time = timedelta(hours=time.date_time.hour,
                                                       minutes=time.date_time.minute,
                                                       days=time.date_time.day) + execution_time_in_datetime_format
-                                for t in times.all()[counter_times:]:
-                                    if t.status == 'works_free' or 'start_day':
+                                start_times = times.all()[counter_times:]
+                                for t in start_times:
+                                    if t.status in ['works_free', 'start_day']:
                                         if timedelta(hours=t.date_time.hour, minutes=t.date_time.minute,
                                                      days=t.date_time.day) >= last_time:
                                             result_list_times.append(time)
                                             break
                                         continue
-                                    else:
+                                    elif t.status == 'end_day':
                                         if timedelta(hours=t.date_time.hour, minutes=t.date_time.minute,
                                                      days=t.date_time.day) >= last_time:
                                             result_list_times.append(time)
                                             break
                                         break
+
                     continue
                 break
 
@@ -169,7 +166,7 @@ class RecordingStepThreeView(View):
             'masters': set([time.master.user.get_full_name() for time in result_list_times]),
             'price_services': price_services,
             'services': Service.objects.filter(id__in=services_id).values('name', 'id'),
-            'category_id': Specialization.objects.filter(service__in=services_id).values('id').first(),
+            'category': Specialization.objects.filter(service__in=services_id).values('id').first(),
         }
 
         return render(request, 'barbershop/step-3.html', context)
@@ -201,12 +198,12 @@ def recording_steep_four(request):
         if len(times):
             break
         counter_free_times += 1
-        if time.status == 'works_free' or 'start_day':
+        if time.status in ['works_free', 'start_day']:
             last_time = timedelta(hours=time.date_time.hour,
                                   minutes=time.date_time.minute,
                                   days=time.date_time.day) + execution_time_in_datetime_format
             for t in free_times.all()[counter_free_times:]:
-                if t.status == 'works_free' or 'start_day':
+                if t.status in ['works_free', 'start_day']:
                     if timedelta(hours=t.date_time.hour, minutes=t.date_time.minute, days=t.date_time.day) >= last_time:
                         times.append(t)
                         break
@@ -249,12 +246,23 @@ def recording_steep_four(request):
                 instance = form.save(commit=False)
                 instance.price = float(price.replace(',', '.'))
                 instance.save()
-                instance.date_and_time_of_recording.set(right_time)
+
+                updated_times = []
+
+                for time in right_time:
+                    if time.status in ['start_day', 'end_day']:
+                        updated_times.append(time)
+                    else:
+                        time.status = 'works_busy'
+                        time.save()
+                        updated_times.append(time)
+
+                instance.date_and_time_of_recording.set(updated_times)
                 instance.services.set(services)
 
                 twilio_settings = TwilioSettings.objects.first()
                 if twilio_settings:
-                    message = f"Сообщение из парикмахерской {info.name}. Ваш номер заказа {instance.id}. У вас запись на {right_time[0].date_time}."
+                    message = f"Сообщение из парикмахерской {info.name}. Ваш номер заказа {instance.id}. У вас запись на {right_time[0].date_time}. Длительность {execution_time}."
                     send_sms(account_sid=twilio_settings.account_sid, auth_token=twilio_settings.auth_token,
                              phone_number_from=twilio_settings.phone_number, phone_number_to=str(instance.phone),
                              message=message)

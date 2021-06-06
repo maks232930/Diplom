@@ -142,7 +142,7 @@ class Recording(models.Model):
     date_time = models.DateTimeField('Дата и время', auto_now_add=True)
 
     def __str__(self):
-        return f'{self.date_and_time_of_recording.first()}'
+        return str(self.date_and_time_of_recording.order_by('date_time').first())
 
     class Meta:
         verbose_name = 'Заказ'
