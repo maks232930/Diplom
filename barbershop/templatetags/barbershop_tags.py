@@ -35,6 +35,11 @@ def get_time_start(time):
 
 
 @register.simple_tag
+def get_script_maps(map):
+    return map
+
+
+@register.simple_tag
 def get_execution_time_in_normal_format(time, input_format='int'):
     if input_format == 'list':
         count_minutes = 0
@@ -56,7 +61,7 @@ def get_specialisations():
 
 @register.inclusion_tag('barbershop/list_recent_reviews.html')
 def get_recent_reviews():
-    return {'reviews': Review.objects.order_by('date_time')[:2]}
+    return {'reviews': Review.objects.order_by('-date_time')[:2]}
 
 
 @register.inclusion_tag('barbershop/list_social_links.html')

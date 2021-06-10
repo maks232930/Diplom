@@ -2,6 +2,16 @@
 
 {% load barbershop_tags %}
 
+{% block style %}
+    .container-wrap-map {
+    filter: invert(100%);
+    -ms-filter: invert(100%);
+    -webkit-filter: invert(100%);
+    -moz-filter: invert(100%);
+    -o-filter: invert(100%);
+    }
+{% endblock %}
+
 {% load static %}
 
 {% block main %}
@@ -204,6 +214,11 @@
         </svg>
     </div>
 
-    {% include 'inc/_google_maps.html' %}
+    <section class="ftco-appointment">
+        <div class="overlay"></div>
+        <div class="container-wrap-map">
+            {{ info.map|safe }}
+        </div>
+    </section>
 
 {% endblock %}

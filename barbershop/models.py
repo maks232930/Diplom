@@ -19,6 +19,7 @@ class GeneralInformation(models.Model):
     working_hours = models.CharField('Рабочие часы', max_length=20)
     description = models.TextField('Описание парикмахерской', max_length=1000)
     mini_text = models.CharField('Краткое описание парикмахерской', max_length=255)
+    map = models.TextField('Яндекс карта', max_length=2000)
 
     def __str__(self):
         return 'Общая информация'

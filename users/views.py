@@ -23,7 +23,7 @@ def login_view(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('barbershop:home')
+                return redirect('users:profile')
 
     context = {
         'form': form,
@@ -104,12 +104,12 @@ def generate_free_times_step_two(request):
         start_day_timedelta += interval
 
         total_seconds = start_day_timedelta.total_seconds()
-        day = start_day_timedelta.days
-        hour = int((total_seconds // 3600) % 24)
-        minute = int((total_seconds % 3600) // 60)
-        second = int((total_seconds % 3600) % 60)
 
-        new_date_time = start_day.replace(day=day, hour=hour, minute=minute, second=second)
+        new_date_time = start_day.replace(day=start_day_timedelta.days,
+                                          hour=int((total_seconds // 3600) % 24),
+                                          minute=int((total_seconds % 3600) // 60),
+                                          second=int((total_seconds % 3600) % 60)
+                                          )
 
         times.append(new_date_time)
 
@@ -117,6 +117,9 @@ def generate_free_times_step_two(request):
         free_times = [time.date_time for time in FreeTime.objects.filter(master=master)]
 
         times_list = [datetime.strptime(time, '%Y-%m-%d %H:%M') for time in request.POST.getlist('time')]
+
+        start_day = times_list[0]
+        end_day = times_list[-1]
 
         free_times_list = []
 

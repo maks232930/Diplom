@@ -37,7 +37,7 @@
                 {% for product in products %}
                     <div class="col-md-3 ftco-animate" style="margin-bottom: 10px">
                         <div class="product-entry text-center">
-                            <a href="#"><img src="{{ product.photo.url }}" class="img-fluid" alt=""></a>
+                            <img src="{{ product.photo.url }}" class="img-fluid" style="height: 300px" alt="">
                             <div class="text">
                                 <h3>{{ product.name }}</h3>
                                 <p class="price mb-4" style="margin-bottom: 8px">Количество: {{ product.quantity }}</p>

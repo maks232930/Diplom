@@ -29,7 +29,6 @@ class HomeView(View):
     def get(request):
         context = {
             'info': GeneralInformation.objects.first(),
-            'social_links': SocialLink.objects.all(),
             'masters': Master.objects.all(),
             'statistics': Statistics.objects.all()
         }
