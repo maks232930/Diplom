@@ -7264,7 +7264,7 @@ a.text-dark:hover, a.text-dark:focus {
 body {
   font-family: "Poppins", Arial, sans-serif;
   background: #1b1b1b;
-  font-size: 15px;
+  font-size: 19px;
   line-height: 1.8;
   font-weight: 300;
   color: gray; }
@@ -7314,7 +7314,7 @@ h1, h2, h3, h4, h5,
       .ftco-navbar-light .navbar-brand {
         color: #fff; } }
   .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
-    font-size: 14px;
+    font-size: 17px;
     padding-top: .9rem;
     padding-bottom: .9rem;
     padding-left: 0;
@@ -7326,8 +7326,8 @@ h1, h2, h3, h4, h5,
       .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
         padding-top: 1.5rem;
         padding-bottom: 1.5rem;
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 15px;
+        padding-right: 15px;
         color: rgba(255, 255, 255, 0.7); } }
     .ftco-navbar-light .navbar-nav > .nav-item > .nav-link:hover {
       color: #ce9c6b; }
@@ -7647,7 +7647,7 @@ h1, h2, h3, h4, h5,
   border-radius: 30px;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
-  font-size: 13px; }
+  font-size: 17px; }
   .btn:hover, .btn:active, .btn:focus {
     outline: none; }
   .btn.btn-primary {
@@ -7734,7 +7734,7 @@ h1, h2, h3, h4, h5,
             color: #fff;
             font-size: 20px; }
   .ftco-intro .wrap h3 {
-    font-size: 16px; }
+    font-size: 19px; }
   .ftco-intro .wrap .text {
     width: calc(100% - 40px); }
   .ftco-intro .wrap .icon {
@@ -7886,7 +7886,7 @@ h1, h2, h3, h4, h5,
       z-index: -1; }
     .pricing-entry .text h3 {
       width: calc(100% - 80px);
-      font-size: 18px; }
+      font-size: 20px; }
       .pricing-entry .text h3 span {
         background: #1b1b1b;
         padding-right: 20px; }
@@ -8157,7 +8157,7 @@ textarea.form-control {
   background: #000; }
 
 .ftco-footer {
-  font-size: 16px;
+  font-size: 18px;
   padding: 7em 0;
   background: #181818; }
   .ftco-footer .ftco-footer-logo {
@@ -8262,7 +8262,7 @@ textarea.form-control {
   margin-bottom: 10px; }
 
 .heading-section h2 {
-  font-size: 30px;
+  font-size: 35px;
   font-weight: 400;
   position: relative; }
   @media (max-width: 767.98px) {
@@ -8455,7 +8455,7 @@ textarea.form-control {
     color: #ce9c6b; }
   .ftco-counter .text span {
     font-weight: 400;
-    font-size: 14px; }
+    font-size: 19px; }
   .ftco-counter .text:hover .icon:after, .ftco-counter .text:focus .icon:after {
     -webkit-transform: rotate(135deg);
     -ms-transform: rotate(135deg);

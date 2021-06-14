@@ -309,7 +309,7 @@ class RecordingDoneView(View):
 class ReviewView(View):
     @staticmethod
     def get(request):
-        reviews = Review.objects.filter(is_show=True).order_by('date_time')
+        reviews = Review.objects.filter(is_show=True).order_by('-date_time')
         paginator = Paginator(reviews, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)

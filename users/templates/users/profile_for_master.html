@@ -36,10 +36,19 @@
         <div class="row mt-5 pt-3">
             <div class="col mb-4">
                 <form method="get" class="contact-form"
-                     style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center">
-                    <h2 style="text-align: center" class="mr-1">Ваши записи на </h2>
-                    {{ form.date }}
-                    <button class="btn btn-primary" type="submit" style="background: #1f2029; border-radius: 4px; font-size: 20px; color: white">Показать</button>
+                      style="display: flex; flex-direction: column; flex-wrap: wrap; justify-content: center; align-items: center">
+                    <h2 style="text-align: center" class="mr-1">Ваши записи на {{ date }} </h2>
+                    <p style="display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;">
+                        {{ form.date }}
+                        <button class="btn btn-primary" type="submit"
+                                style="background: #1f2029; border-radius: 4px; font-size: 20px; color: white">Показать
+                        </button>
+                    </p>
+
                 </form>
                 <table class="table table-dark table-striped">
                     <thead>
