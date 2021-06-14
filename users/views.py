@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from barbershop.models import Master, Recording, FreeTime
-from users.forms import LoginForm, GenerateFreeTimesForm
+from users.forms import LoginForm, GenerateFreeTimesForm, RecordingByDateForm
 
 
 def login_view(request):
@@ -23,7 +23,10 @@ def login_view(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('users:profile')
+                if user.is_superuser:
+                    return redirect('users:profile_admin')
+                else:
+                    return redirect('users:profile_master')
 
     context = {
         'form': form,
@@ -33,7 +36,10 @@ def login_view(request):
 
 
 @login_required
-def profile_view(request):
+def profile_for_admin_view(request):
+    if not request.user.is_superuser:
+        return redirect('users:profile_master')
+
     master = Master.objects.filter(user=request.user).first()
     recordings = Recording.objects.all()
 
@@ -56,7 +62,53 @@ def profile_view(request):
             'recordings': recordings,
         }
 
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile_for_admin.html', context)
+
+
+@login_required
+def profile_for_master_view(request):
+    if request.user.is_superuser:
+        return redirect('users:profile_admin')
+
+    master = Master.objects.get(user=request.user)
+
+    if request.GET.get('date'):
+        date_ = datetime.strptime(str(request.GET.get('date')), '%Y-%m-%d')
+
+        date_time_start = datetime.strptime(f'{date_.day}.{date_.month}.{date_.year} 00:00:00',
+                                            '%d.%m.%Y %H:%M:%S')
+        date_time_end = datetime.strptime(f'{date_.day}.{date_.month}.{date_.year} 23:59:59',
+                                          '%d.%m.%Y %H:%M:%S')
+
+        recordings = Recording.objects.filter(date_and_time_of_recording__master=master,
+                                              date_and_time_of_recording__date_time__range=(
+                                                  date_time_start, date_time_end))
+
+        form = RecordingByDateForm(initial={'date': date_})
+
+        context = {
+            'form': form,
+            'recordings': set(recordings)
+        }
+
+        return render(request, 'users/profile_for_master.html', context)
+
+    date_time_start = datetime.strptime(f'{datetime.now().day}.{datetime.now().month}.{datetime.now().year} 00:00:00',
+                                        '%d.%m.%Y %H:%M:%S')
+    date_time_end = datetime.strptime(f'{datetime.now().day}.{datetime.now().month}.{datetime.now().year} 23:59:59',
+                                      '%d.%m.%Y %H:%M:%S')
+
+    recordings = Recording.objects.filter(date_and_time_of_recording__master=master,
+                                          date_and_time_of_recording__date_time__range=(date_time_start, date_time_end))
+
+    form = RecordingByDateForm()
+
+    context = {
+        'form': form,
+        'recordings': set(recordings)
+    }
+
+    return render(request, 'users/profile_for_master.html', context)
 
 
 def user_logout(request):
@@ -67,7 +119,7 @@ def user_logout(request):
 @login_required
 def generate_free_times_step_one(request):
     if not request.user.is_superuser:
-        return redirect('users:profile')
+        return redirect('users:profile_master')
 
     return_path = request.META.get('HTTP_REFERER', '/')
 
@@ -84,7 +136,7 @@ def generate_free_times_step_one(request):
 @login_required
 def generate_free_times_step_two(request):
     if not request.user.is_superuser:
-        return redirect('users:profile')
+        return redirect('users:profile_master')
 
     master = Master.objects.get(id=request.GET.get('master'))
     start_day = datetime.strptime(request.GET.get('start_day').replace('T', ' '), '%Y-%m-%d %H:%M')
@@ -138,7 +190,7 @@ def generate_free_times_step_two(request):
 
         FreeTime.objects.bulk_create(free_times_list)
 
-        return redirect('users:profile')
+        return redirect('users:profile_admin')
 
     context = {
         'times': times

@@ -457,11 +457,10 @@
         </div>
     </div>
     <div class="container">
-        <div class="row mt-5 pt-3">
+        <div class="row mt-3 pt-3">
             <div class="col">
-                <h2 style="text-align: center; font-size: 40px">Онлайн-запись</h2>
+                <h2 style="text-align: center; font-size: 40px">Выбор категории</h2>
                 <form method="get" action="{% url 'barbershop:recording_step_two' %}">
-                    <h3>Выберите категорию:</h3>
                     <div>
                         {% for category in categories %}
                             <input class="checkbox-tools" type="radio" name="category" id="tool-{{ category.id }}"

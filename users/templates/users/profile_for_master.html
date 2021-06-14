@@ -1,0 +1,83 @@
+{% extends 'barbershop_base.html' %}
+
+{% load barbershop_tags %}
+
+{% block style %}
+    input, textarea {
+    outline:none;
+    }
+
+    input:focus, textarea:focus {
+    outline:none;
+    }
+
+{% endblock %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block main %}
+    <div class="hero-wrap" style="background-image: {% get_main_photo %};"
+         data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center"
+                 data-scrollax-parent="true">
+                <div class="col-md-6 text-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+                    <h1 class="mb-3 mt-5 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                        Добро пожаловать, {{ request.user.get_full_name }}</h1>
+                    <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
+                            class="mr-2"><a href="{% url 'barbershop:home' %}">Главная</a></span> <span>Профиль</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row mt-5 pt-3">
+            <div class="col mb-4">
+                <form method="get" class="contact-form"
+                     style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center">
+                    <h2 style="text-align: center" class="mr-1">Ваши записи на </h2>
+                    {{ form.date }}
+                    <button class="btn btn-primary" type="submit" style="background: #1f2029; border-radius: 4px; font-size: 20px; color: white">Показать</button>
+                </form>
+                <table class="table table-dark table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Номер телефона</th>
+                        <th scope="col">Услуги</th>
+                        <th scope="col">Время выполнения</th>
+                        <th scope="col">Время записи</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if recordings %}
+                        {% for recording in recordings %}
+                            <tr>
+                                <th scope="row">{{ recording.id }}</th>
+                                <td>{{ recording.name }}</td>
+                                <td>{{ recording.phone }}</td>
+                                <td>
+                                    {% for service in recording.services.all %}
+                                        {% if recording.services.count == forloop.counter %}
+                                            {{ service.name }}.
+                                        {% else %}
+                                            {{ service.name }},
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{% get_execution_time_in_normal_format time=recording.services.all input_format='list' %}</td>
+                                <td>{% get_time_start time=recording.date_and_time_of_recording.last %}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <h2 style="text-align: center">У вас нет записей</h2>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,8 +3,7 @@ from django import template
 from barbershop.models import Specialization, Review, SocialLink, GeneralInformation
 
 register = template.Library()
-general_information = GeneralInformation.objects.values('main_photo', 'mini_text', 'contact_number', 'contact_email', 'location',
-                                                        'name').first()
+general_information = GeneralInformation.objects.first()
 
 
 def plural_rus_variant(hours):
@@ -81,9 +80,9 @@ def get_mini_text():
 
 @register.inclusion_tag('barbershop/logo_tpl.html')
 def get_logo_name():
-    return {'info': general_information}
+    return {'info': GeneralInformation.objects.first()}
 
 
 @register.inclusion_tag('barbershop/main_photo_tpl.html')
 def get_main_photo():
-    return {'info': GeneralInformation.objects.first()}
+    return {'info': general_information}

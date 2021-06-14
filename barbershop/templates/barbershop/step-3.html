@@ -214,8 +214,8 @@
     padding-top: 20px;
     padding-bottom: 20px;
     width: 260px;
-    font-size: 30px;
-    line-height: 52px;
+    font-size: 21px;
+    line-height: 10px;
     font-weight: 700;
     letter-spacing: 1px;
     margin: 0 auto;
@@ -462,33 +462,44 @@
         </div>
     </div>
     <div class="container">
-        <h2 style="text-align: center; font-size: 40px">Онлайн-запись</h2>
+        <h2 class="mt-3" style="text-align: center; font-size: 40px">Выбор времени</h2>
         {% if times %}
             <div class="col">
                 <div class="row pt-3">
                     <form method="get" action="{% url 'barbershop:recording_step_four' %}" style="width: 100%;">
-                        <h3>Выберите время:</h3>
                         {% for master in masters %}
-                            <div>
-                            <h3 style="text-align: center">Мастер {{ master }}</h3>
-                            {% for time in times %}
-                                {% if time.master.user.get_full_name == master %}
-                                    <input class="checkbox-times" type="radio" name="times" id="times-{{ time.id }}"
-                                           required value="{{ time.date_time|date:'Y-m-d H:i' }}">
-                                    <label class="for-checkbox-times ml-0" for="times-{{ time.id }}">
-                                        <span data-hover="{{ time.date_time }}">{{ time.date_time }}</span>
-                                    </label>
-                                {% endif %}
-                            {% endfor %}
+                            <div style="text-align: center">
+                                <p>
+                                    <a class="btn" data-bs-toggle="collapse"
+                                       href="#collapseExample-{{ master.id }}"
+                                       role="button" aria-expanded="false" aria-controls="collapseExample"
+                                       style="width: 100%; background: #1f2029; border-radius: 4px; font-size: 20px; color: white">
+                                        Мастер {{ master.user.get_full_name }}
+                                    </a>
+                                </p>
+                                <div class="collapse" id="collapseExample-{{ master.id }}">
+                                    {% for time in times %}
+                                        {% if time.master == master %}
+                                            <input class="checkbox-times" type="radio" name="times"
+                                                   id="times-{{ time.id }}"
+                                                   required value="{{ time.date_time|date:'Y-m-d H:i' }}">
+                                            <label class="for-checkbox-times ml-0" for="times-{{ time.id }}">
+                                                <span data-hover="{{ time.date_time }}">{{ time.date_time }}</span>
+                                            </label>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
                         {% endfor %}
-                        </div>
+
                         <div class="form-group mt-4" style="display:flex; justify-content: space-between">
                             <input type="text" hidden name="price" value="{{ price_services }}">
                             <input type="text" hidden name="execution_time" value="{{ execution_time }}">
                             {% for service in services %}
                                 <input type="text" hidden name="services_id" value="{{ service.id }}">
                             {% endfor %}
-                            <a href="{% url 'barbershop:recording_step_two' %}?category={{ category.id }}" class="btn btn-primary py-3 px-4">Назад</a>
+                            <a href="{% url 'barbershop:recording_step_two' %}?category={{ category.id }}"
+                               class="btn btn-primary py-3 px-4">Назад</a>
                             <input type="submit" value="Далее" class="btn btn-primary py-3 px-4">
                         </div>
                     </form>
@@ -502,73 +513,4 @@
         {% endif %}
     </div>
 
-
-
-
-    {#            <div class="col">#}
-    {#                <h2 style="text-align: center; font-size: 40px">Онлайн-запись</h2>#}
-    {#                {% if times %}#}
-    {#                    <form method="get" action="{% url 'barbershop:recording_step_four' %}">#}
-    {#                        <h3>Выберите время:</h3>#}
-    {#                        <div class="row align-items-center">#}
-    {#                            <div class="col">#}
-    {#                                <table class="table table-bordered table-sm m-0">#}
-    {#                                    <thead class="">#}
-    {#                                    <tr>#}
-    {#                                        <th class="pl-2">#</th>#}
-    {#                                        <th class="pl-2">Мастер</th>#}
-    {#                                        <th class="pl-2">Время записи</th>#}
-    {#                                        <th class="pl-2">Услуги</th>#}
-    {#                                        <th class="pl-2">Время исполнения</th>#}
-    {#                                        <th class="pl-2">Цена(BYN)</th>#}
-    {#                                    </tr>#}
-    {#                                    </thead>#}
-    {#                                    <tbody>#}
-    {#                                    {% for time in times %}#}
-    {#                                        <tr>#}
-    {#                                            <td style="vertical-align: middle">#}
-    {#                                                <div class="input-group"#}
-    {#                                                     style="justify-content: center; align-items: center">#}
-    {#                                                    <div class="input-group-prepend">#}
-    {#                                                        <div class="input">#}
-    {#                                                            <input type="radio"#}
-    {#                                                                   name="times"#}
-    {#                                                                   value="{{ time.date_time|date:'Y-m-d H:i' }}"#}
-    {#                                                                   required>#}
-    {#                                                        </div>#}
-    {#                                                    </div>#}
-    {#                                                </div>#}
-    {#                                            </td>#}
-    {#                                            <td class="pl-2">{{ time.master.user.get_full_name }}</td>#}
-    {#                                            <td class="pl-2">{{ time.date_time }}</td>#}
-    {#                                            <td class="pl-2">{% for service in services %}#}
-    {#                                                <p>{{ service.name }}</p>#}
-    {#                                            {% endfor %}#}
-    {#                                            </td>#}
-    {#                                            <td class="pl-2">{{ execution_time }}</td>#}
-    {#                                            <td class="pl-2">{{ price_services }}</td>#}
-    {#                                        </tr>#}
-    {#                                    {% empty %}#}
-    {#                                        <h4 style="text-align: center">Сбодоного времени нет</h4>#}
-    {#                                    {% endfor %}#}
-    {#                                    </tbody>#}
-    {#                                </table>#}
-    {#                            </div>#}
-    {#                        </div>#}
-    {#                            <div class="form-group mt-4">#}
-    {#                                <input type="text" hidden name="price" value="{{ price_services }}">#}
-    {#                                <input type="text" hidden name="execution_time" value="{{ execution_time }}">#}
-    {#                                {% for service in services %}#}
-    {#                                    <input type="text" hidden name="services_id" value="{{ service.id }}">#}
-    {#                                {% endfor %}#}
-    {##}
-    {#                                <input type="submit" value="Далее" class="btn btn-primary py-3 px-4">#}
-    {#                            </div>#}
-    {#                    </form>#}
-    {#                {% else %}#}
-    {#                    <h2>Свободного времени нет(</h2>#}
-    {#                    <a href="{% url 'barbershop:home' %}" class="btn btn-primary py-3 px-4 mb-3">На главную</a>#}
-    {#                {% endif %}#}
-    {##}
-    {#            </div>#}
 {% endblock %}

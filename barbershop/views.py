@@ -30,6 +30,7 @@ class HomeView(View):
         context = {
             'info': GeneralInformation.objects.first(),
             'masters': Master.objects.all(),
+            'social_links': SocialLink.objects.all(),
             'statistics': Statistics.objects.all()
         }
 
@@ -51,6 +52,7 @@ def contact_form_view(request):
     form = MessageForm()
 
     context = {
+        'info': GeneralInformation.objects.first(),
         'form': form,
     }
 
@@ -116,7 +118,8 @@ class RecordingStepThreeView(View):
         result_list_times = []
 
         masters = Master.objects.all().select_related('user').prefetch_related('services')
-        times = FreeTime.objects.filter(date_time__gte=datetime.today()).select_related('master__user').order_by('date_time')
+        times = FreeTime.objects.filter(date_time__gte=datetime.today()).select_related('master__user').order_by(
+            'date_time')
 
         execution_time_and_price = Service.objects.filter(id__in=services_id).values('execution_time', 'price')
         spent_minutes = execution_time_and_price.values('execution_time').aggregate(Sum('execution_time'))
@@ -141,7 +144,7 @@ class RecordingStepThreeView(View):
                                 last_time = timedelta(hours=time.date_time.hour,
                                                       minutes=time.date_time.minute,
                                                       days=time.date_time.day) + execution_time_in_datetime_format
-                                start_times = times.all()[counter_times:]
+                                start_times = filter_times.all()[counter_times:]
                                 for t in start_times:
                                     if t.status in ['works_free', 'start_day']:
                                         if timedelta(hours=t.date_time.hour, minutes=t.date_time.minute,
@@ -155,6 +158,7 @@ class RecordingStepThreeView(View):
                                             result_list_times.append(time)
                                             break
                                         break
+                                    break
 
                     continue
                 break
@@ -162,7 +166,7 @@ class RecordingStepThreeView(View):
         context = {
             'execution_time': execution_time,
             'times': result_list_times,
-            'masters': set([time.master.user.get_full_name() for time in result_list_times]),
+            'masters': set([time.master for time in result_list_times]),
             'price_services': price_services,
             'services': Service.objects.filter(id__in=services_id).values('name', 'id'),
             'category': Specialization.objects.filter(service__in=services_id).values('id').first(),
@@ -247,6 +251,8 @@ def recording_steep_four(request):
                 instance.save()
 
                 updated_times = []
+                services_str = ""
+                counter = 1
 
                 for time in right_time:
                     if time.status in ['start_day', 'end_day']:
@@ -256,12 +262,19 @@ def recording_steep_four(request):
                         time.save()
                         updated_times.append(time)
 
+                for service in services:
+                    if services.count() == counter:
+                        services_str += f'{service.name}.'
+                    else:
+                        counter += 1
+                        services_str += f'{service.name},'
+
                 instance.date_and_time_of_recording.set(updated_times)
                 instance.services.set(services)
 
                 twilio_settings = TwilioSettings.objects.first()
                 if twilio_settings:
-                    message = f"Сообщение из парикмахерской {info.name}. Ваш номер заказа {instance.id}. У вас запись на {right_time[0].date_time}. Длительность {execution_time}."
+                    message = f"Сообщение из парикмахерской {info.name}. Вы записались на: {services_str} Ваш номер заказа {instance.id}. Стоимость {price.replace(',', '.')}BYN. Время {right_time[0].date_time}. Длительность {execution_time}."
                     send_sms(account_sid=twilio_settings.account_sid, auth_token=twilio_settings.auth_token,
                              phone_number_from=twilio_settings.phone_number, phone_number_to=str(instance.phone),
                              message=message)

@@ -17,7 +17,11 @@
                 <li class="nav-item {% if request.path == '/contact/' %}active{% endif %}"><a href="{% url 'barbershop:contact' %}" class="nav-link">Контакты</a></li>
                 <li class="nav-item {% if request.path == '/recording-step-one/' %}active{% endif %}"><a href="{% url 'barbershop:recording_step_one' %}" class="nav-link">Онлайн-запись</a></li>
                 {% if request.user.is_authenticated %}
-                    <li class="nav-item {% if request.path == '/user/profile/' %}active{% endif %}"><a href="{% url 'users:profile' %}" class="nav-link">Профиль</a></li>
+                    {% if request.user.is_superuser %}
+                        <li class="nav-item {% if request.path == '/user/profile-admin/' %}active{% endif %}"><a href="{% url 'users:profile_admin' %}" class="nav-link">Профиль</a></li>
+                    {% else %}
+                        <li class="nav-item {% if request.path == '/user/profile-master/' %}active{% endif %}"><a href="{% url 'users:profile_master' %}" class="nav-link">Профиль</a></li>
+                    {% endif %}
                     <li class="nav-item {% if request.path == '/logout/' %}active{% endif %}"><a href="{% url 'users:logout' %}" class="nav-link">Выход</a></li>
                 {% else %}
                     <li class="nav-item {% if request.path == '/user/login/' %}active{% endif %}"><a href="{% url 'users:login' %}" class="nav-link">Вход</a></li>

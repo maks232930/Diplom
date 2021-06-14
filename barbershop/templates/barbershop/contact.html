@@ -34,10 +34,10 @@
                             <p><span>Адрес:</span> {{ info.location }}</p>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <p><span>Телефон:</span> <a href="tel://1234567920">{{ info.contact_number }}</a></p>
+                            <p><span>Телефон:</span> <a href="tel:{{ info.contact_number }}">{{ info.contact_number }}</a></p>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <p><span>Email:</span> <a href="mailto:info@yoursite.com">{{ info.contact_email }}</a></p>
+                            <p><span>Email:</span> <a href="mailto:{{ info.contact_email }}">{{ info.contact_email }}</a></p>
                         </div>
                     </div>
                 </div>

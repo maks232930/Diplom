@@ -23,8 +23,8 @@ class RecordingForm(forms.ModelForm):
         widgets = {
             'services': forms.HiddenInput(),
             'date_and_time_of_recording': forms.HiddenInput(),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Телефон для связи', 'style': 'width: 25%; font-size: 15px'}),
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваше имя', 'style': 'width: 25%; font-size: 15px'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Телефон для связи', 'style': 'max-width: 300px; font-size: 15px'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваше имя', 'style': 'max-width: 300px; font-size: 15px'}),
             'price': forms.HiddenInput()
         }
 

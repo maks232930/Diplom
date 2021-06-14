@@ -19,12 +19,9 @@ def get_execution_time_in_normal_format(time, return_format='str'):
 
 
 def send_sms(account_sid, auth_token, phone_number_from, phone_number_to, message):
-    try:
-        client = Client(account_sid, auth_token)
+    client = Client(account_sid, auth_token)
 
-        client.messages.create(
-            body=message,
-            to=phone_number_to,
-            from_=phone_number_from)
-    except:
-        return
+    client.messages.create(
+        body=message,
+        to=phone_number_to,
+        from_=phone_number_from)
