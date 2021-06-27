@@ -21,7 +21,7 @@ from .models import (
     Statistics,
     TwilioSettings
 )
-from .utils import get_execution_time_in_normal_format, send_sms
+from .utils import get_execution_time_in_normal_format, send_sms, get_datetime_and_master_id
 
 
 class HomeView(View):
@@ -116,6 +116,8 @@ class RecordingStepThreeView(View):
             return redirect(return_path)
 
         result_list_times = []
+        days_month = []
+        result_days_month = []
 
         masters = Master.objects.all().select_related('user').prefetch_related('services')
         times = FreeTime.objects.filter(date_time__gte=datetime.today()).select_related('master__user').order_by(
@@ -132,9 +134,9 @@ class RecordingStepThreeView(View):
         for master in masters:
             counter = 0
             for service in services:
-                counter += 1
                 master_services = master.get_services()
                 if service in master_services:
+                    counter += 1
                     if counter == len_services:
                         counter_times = 0
                         filter_times = times.filter(master=master)
@@ -163,10 +165,18 @@ class RecordingStepThreeView(View):
                     continue
                 break
 
+        for time in result_list_times:
+            days_month.append([time.date_time.day, time.date_time.month])
+
+        for item in days_month:
+            if item not in result_days_month:
+                result_days_month.append(item)
+
         context = {
             'execution_time': execution_time,
             'times': result_list_times,
             'masters': set([time.master for time in result_list_times]),
+            'days': result_days_month,
             'price_services': price_services,
             'services': Service.objects.filter(id__in=services_id).values('name', 'id'),
             'category': Specialization.objects.filter(service__in=services_id).values('id').first(),
@@ -177,12 +187,14 @@ class RecordingStepThreeView(View):
 
 def recording_steep_four(request):
     price = request.GET.get('price')
-    time_start = datetime.strptime(request.GET.get('times'), '%Y-%m-%d %H:%M')
+    date_time, master_id = get_datetime_and_master_id(request.GET.get('times')[1:-1])
+
+    time_start = datetime.strptime(date_time, '%Y-%m-%d %H:%M')
     execution_time = request.GET.get('execution_time')
     services_id = request.GET.getlist('services_id')
 
     services = Service.objects.filter(id__in=services_id)
-    free_times = FreeTime.objects.filter(date_time__gte=time_start).order_by('date_time')
+    free_times = FreeTime.objects.filter(date_time__gte=time_start, master__id=master_id).order_by('date_time', 'master')
     info = GeneralInformation.objects.first()
 
     return_path = request.META.get('HTTP_REFERER', '/')
@@ -274,7 +286,7 @@ def recording_steep_four(request):
 
                 twilio_settings = TwilioSettings.objects.first()
                 if twilio_settings:
-                    message = f"Сообщение из парикмахерской {info.name}. Вы записались на: {services_str} Ваш номер заказа {instance.id}. Стоимость {price.replace(',', '.')}BYN. Время {right_time[0].date_time}. Длительность {execution_time}."
+                    message = f"Сообщение из парикмахерской {info.name}. Вы записались к мастеру: {right_time[0].master.user.get_full_name()} на: {services_str} Ваш номер записи {instance.id}. Стоимость {price.replace(',', '.')} BYN. Время {right_time[0].date_time}. Длительность {execution_time}."
                     send_sms(account_sid=twilio_settings.account_sid, auth_token=twilio_settings.auth_token,
                              phone_number_from=twilio_settings.phone_number, phone_number_to=str(instance.phone),
                              message=message)

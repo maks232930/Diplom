@@ -8,7 +8,7 @@ from users.views import (
     generate_free_times_step_one,
     generate_free_times_step_two,
     generate_report_pdf_step_one,
-    generate_report_pdf
+    PDFUserDetailView
 )
 
 app_name = 'users'
@@ -21,7 +21,7 @@ urlpatterns = [
     path('generate-free-times-step-one/', generate_free_times_step_one, name='generate_free_times_step_one'),
     path('generate-free-times-step-two/', generate_free_times_step_two, name='generate_free_times_step_two'),
     path('generate-report-master-step-one/', generate_report_pdf_step_one, name='generate_report_steep_one'),
-    path('report-master/', generate_report_pdf, name='report_master'),
+    path('report-master/', PDFUserDetailView.as_view(), name='report_master'),
 
 
 ]

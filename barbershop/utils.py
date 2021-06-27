@@ -19,9 +19,34 @@ def get_execution_time_in_normal_format(time, return_format='str'):
 
 
 def send_sms(account_sid, auth_token, phone_number_from, phone_number_to, message):
-    client = Client(account_sid, auth_token)
+    try:
+        client = Client(account_sid, auth_token)
 
-    client.messages.create(
-        body=message,
-        to=phone_number_to,
-        from_=phone_number_from)
+        client.messages.create(
+            body=message,
+            to=phone_number_to,
+            from_=phone_number_from)
+    except:
+        return
+
+
+def get_datetime_and_master_id(times):
+    date_time = ''
+    master_id = ''
+    counter = 0
+
+    for i in times:
+        counter += 1
+
+        if i == ',':
+            for j in times[counter:]:
+                counter += 1
+
+                master_id += j
+
+        if len(times) == counter:
+            break
+
+        date_time += i
+
+    return date_time, int(master_id)

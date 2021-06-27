@@ -145,9 +145,20 @@ class Recording(models.Model):
     def __str__(self):
         return str(self.date_and_time_of_recording.order_by('date_time').first())
 
+    def delete(self, using=None, keep_parents=False):
+        times = self.date_and_time_of_recording.all()
+        for time in times:
+            if time.status in ['start_day', 'end_day']:
+                pass
+            else:
+                time.status = 'works_free'
+                time.save()
+
+        super(Recording, self).delete()
+
     class Meta:
-        verbose_name = 'Заказ'
-        verbose_name_plural = 'Заказы'
+        verbose_name = 'Запись'
+        verbose_name_plural = 'Записи'
 
 
 class FreeTime(models.Model):

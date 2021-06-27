@@ -462,7 +462,7 @@
         </div>
     </div>
     <div class="container">
-        <h2 class="mt-3" style="text-align: center; font-size: 40px">Выбор времени</h2>
+        <h2 class="mt-3" style="text-align: center; font-size: 40px">Выбор мастера</h2>
         {% if times %}
             <div class="col">
                 <div class="row pt-3">
@@ -476,19 +476,35 @@
                                        style="width: 100%; background: #1f2029; border-radius: 4px; font-size: 20px; color: white">
                                         Мастер {{ master.user.get_full_name }}
                                     </a>
+
                                 </p>
                                 <div class="collapse" id="collapseExample-{{ master.id }}">
-                                    {% for time in times %}
-                                        {% if time.master == master %}
-                                            <input class="checkbox-times" type="radio" name="times"
-                                                   id="times-{{ time.id }}"
-                                                   required value="{{ time.date_time|date:'Y-m-d H:i' }}">
-                                            <label class="for-checkbox-times ml-0" for="times-{{ time.id }}">
-                                                <span data-hover="{{ time.date_time }}">{{ time.date_time }}</span>
-                                            </label>
-                                        {% endif %}
+                                    {% for day, month in days %}
+                                        <p>
+                                            <a class="btn" data-bs-toggle="collapse"
+                                               href="#collapseExample-{{ day }}-{{ month }}"
+                                               role="button" aria-expanded="false" aria-controls="collapseExample"
+                                               style="width: 100%; background: #1f2029; border-radius: 4px; font-size: 20px; color: white">
+                                                {{ day }}.{{ month }}
+                                            </a>
+                                        </p>
+                                        <div class="collapse" id="collapseExample-{{ day }}-{{ month }}">
+                                            {% for time in times %}
+                                                {% if time.master == master and day == time.date_time.day and time.date_time.month == month %}
+                                                    <input class="checkbox-times" type="radio" name="times"
+                                                           id="times-{{ time.id }}"
+                                                           required value="[{{ time.date_time|date:'Y-m-d H:i' }}, {{ master.id }}]">
+                                                    <label class="for-checkbox-times ml-0" for="times-{{ time.id }}">
+                                                        <span data-hover="{{ time.date_time }}">{{ time.date_time }}</span>
+                                                    </label>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% empty %}
+                                        <h2>Свободного времени нет(</h2>
                                     {% endfor %}
                                 </div>
+
                             </div>
                         {% endfor %}
 

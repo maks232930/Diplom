@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'ckeditor',
     'phonenumber_field',
+    'easy_pdf',
 
     'users.apps.UsersConfig',
     'barbershop.apps.BarbershopConfig',
