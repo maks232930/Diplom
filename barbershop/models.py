@@ -145,7 +145,7 @@ class Recording(models.Model):
     def __str__(self):
         return str(self.date_and_time_of_recording.order_by('date_time').first())
 
-    def delete(self, using=None, keep_parents=False):
+    def delete(self, using=None, keep_parents=True):
         times = self.date_and_time_of_recording.all()
         for time in times:
             if time.status in ['start_day', 'end_day']:
